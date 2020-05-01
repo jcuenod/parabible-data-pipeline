@@ -3,8 +3,10 @@ from tf.app import use
 import sqlite3
 from rid_helper import passage_to_index
 
-outputFile = sys.argv[1]
-conn = sqlite3.connect(outputFile)
+sqlFile = sys.argv[1]
+jsonFile = sys.argv[2]
+
+conn = sqlite3.connect(sqlFile)
 c = conn.cursor()
 
 # Remove checkout=local if you haven't updated the data files in a while
@@ -63,10 +65,10 @@ feature_functions = {
     # TODO: "accent_quality": lambda n: F.accent_quality.v(n),
     # MAYBE: `rela` seems to be similar to `function` - might be worth adding
     # DON'T BOTHER: qere_trailer_utf8"
-    "phrase_node_id": L.u(n, otype="phrase")[0],
-    "clause_node_id": L.u(n, otype="clause")[0],
-    "sentence_node_id": L.u(n, otype="sentence")[0],
-    "reference_id": passage_to_index(T.sectionFromNode(n)),
+    "phrase_node_id": lambda n: L.u(n, otype="phrase")[0],
+    "clause_node_id": lambda n: L.u(n, otype="clause")[0],
+    "sentence_node_id": lambda n: L.u(n, otype="sentence")[0],
+    "reference_node_id": lambda n: passage_to_index(T.sectionFromNode(n)),
 }
 def features(n):
     r = {}
@@ -81,13 +83,15 @@ def features(n):
 
 # for k in TF.features.keys(): print(k)
 
+def sql_type(key):
+    return "INTEGER" if key.endswith("_node_id") else "TEXT"
 
 drop_table_sql = """
 DROP TABLE IF EXISTS words
 """
 fields = list(feature_functions.keys())
 fields.remove("wid")
-field_sql = ",\n    ".join(k + " TEXT" for k in fields)
+field_sql = ",\n    ".join(f'{k} {sql_type(k)}' for k in fields)
 create_table_sql = f"""
 CREATE TABLE words (
     wid INTEGER PRIMARY KEY,
@@ -112,6 +116,11 @@ def sqlify(w):
     else:
         return '"' + str(w) + '"'
 
+print("Writing word_features to json")
+import json
+with open(jsonFile, 'w') as outfile:
+    json.dump(fields, outfile)
+
 BATCH_SIZE = 50000
 values = []
 i = 0
@@ -135,3 +144,4 @@ if len(values) > 0:
 
 conn.close()
 print("Done!")
+
