@@ -1,8 +1,8 @@
-const word_features = require("./word_features.json")
-const outputFile = "./output/bhs.sqlite"o
-
 const fs = require("fs")
 const exec = require("child_process").execSync
+
+const word_features = require("./word_features.json")
+const outputFile = "./output/bhs.sqlite"
 
 console.log("Checking for prepopulated sqlite")
 if (!fs.existsSync(outputFile)) {
@@ -43,6 +43,7 @@ const prepare_text_iterator = () => {
 			yield { rid: key, text: rows_by_rid[key] }
 		})
 	}
+}
 module.exports = {
 	word_features: () => word_features,
 	text_iterator: (parallel_id_object) => {
