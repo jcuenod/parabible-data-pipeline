@@ -1,0 +1,22 @@
+{
+  "name": "parabible-data-pipeline",
+  "version": "1.0.0",
+  "description": "## Usage:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcuenod/parabible-data-pipeline.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcuenod/parabible-data-pipeline/issues"
+  },
+  "homepage": "https://github.com/jcuenod/parabible-data-pipeline#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.0.1"
+  }
+}
