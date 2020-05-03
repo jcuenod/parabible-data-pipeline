@@ -18,6 +18,11 @@ options:
 
 > Will rebuild <version> even if it finds cached stuff there. I have no intention of keeping track with whether the cached stuff is up to date with the latest coded version.
 
+## Requirements:
+
+ - Node (probably >= 6)
+ - Python 3.6 (for tf-bhs)
+
 ## Attribution:
 
 **Parallel Versification**:<br />
