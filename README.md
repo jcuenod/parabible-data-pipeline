@@ -21,3 +21,5 @@ options:
 ## Attribution:
 
 `references.sqlite` is derived from CCEL by Adam Baker at <https://github.com/adamb924/references-in-sqlite>
+
+**BHS**: Data from Eep Talstra Centre for Bible and Computer. See <https://etcbc.github.io/bhsa/>.
