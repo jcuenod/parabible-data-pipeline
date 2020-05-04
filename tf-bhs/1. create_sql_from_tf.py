@@ -68,7 +68,7 @@ feature_functions = {
     "phrase_node_id": lambda n: L.u(n, otype="phrase")[0],
     "clause_node_id": lambda n: L.u(n, otype="clause")[0],
     "sentence_node_id": lambda n: L.u(n, otype="sentence")[0],
-    "reference_node_id": lambda n: passage_to_index(T.sectionFromNode(n)),
+    "rid": lambda n: passage_to_index(T.sectionFromNode(n)), # This is the old `rid`
 }
 def features(n):
     r = {}
@@ -95,7 +95,8 @@ field_sql = ",\n    ".join(f'{k} {sql_type(k)}' for k in fields)
 create_table_sql = f"""
 CREATE TABLE words (
     wid INTEGER PRIMARY KEY,
-    {field_sql}
+    {field_sql},
+    verse_node_id INTEGER
 )
 """
 c.execute(drop_table_sql)
@@ -141,6 +142,12 @@ for n in F.otype.s('word'):
 if len(values) > 0:
     print(" ... " + str(i))
     do_insert(",".join(values))
+
+c.execute("SELECT DISTINCT(rid) FROM words ORDER BY rid")
+rids = c.fetchall()
+rid_list = list(map(lambda args: {"value": args[0] + 1, "rid": args[1][0]}, enumerate(rids)))
+c.executemany('UPDATE test SET verse_node_id=:value WHERE rid=:rid', rid_list)
+conn.commit()
 
 conn.close()
 print("Done!")
