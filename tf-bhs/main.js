@@ -25,40 +25,44 @@ const word_features = require(jsonOutputFile)
 const sqlite = require('better-sqlite3')
 const db = sqlite(sqlOutputFile)
 
-const prepare_word_iterator = () => {
+const prepare_word_iterator = ({node_offset}) => {
 	const rows = db.prepare('SELECT * FROM words').all()
 	function* word_iterator() {
 		for (let i = 0; i < rows.length; i++) {
+			rows[i].wid += node_offset
+			rows[i].phrase_node_id += node_offset
+			rows[i].clause_node_id += node_offset
+			rows[i].sentence_node_id += node_offset
+			rows[i].verse_node_id += node_offset
 			yield rows[i]
 		}
 	}
 	return word_iterator
 }
-const prepare_text_iterator = () => {
-	const rows = db.prepare('SELECT wid, text, trailer, reference_node_id FROM words ORDER BY wid').all()
+const prepare_text_iterator = ({ node_offset, get_parallel_id_from_rid_and_version }) => {
+	const rows = db.prepare('SELECT wid, text, trailer, rid FROM words ORDER BY wid').all()
 	const rows_by_rid = {}
 	rows.forEach(row => {
-		rid = row.reference_node_id
+		const rid = row.rid
 		if (!(rid in rows_by_rid)) {
 			rows_by_rid[rid] = []
 		}
 		const { wid, text, trailer } = row
-		rows_by_rid[rid].push([ wid, text, trailer ])
+		rows_by_rid[rid].push([ wid+node_offset, text, trailer ])
 	})
 	function* text_iterator() {
 		const rows_by_rid_keys = Object.keys(rows_by_rid) 
 		for (let i = 0; i < rows_by_rid_keys.length; i++) {
 			const key = rows_by_rid_keys[i]
-			yield { rid: key, text: rows_by_rid[key] }
+			const parallel_id = get_parallel_id_from_rid_and_version({rid: key, version: "bhs"})
+			// Sort can be i because this iterates in order of wid based on the SELECT above
+			yield { parallel_id, text: rows_by_rid[key], sort: i }
 		}
 	}
 	return text_iterator
 }
 module.exports = {
-	word_features: () => word_features,
-	ti: () => prepare_text_iterator(),
-	text_iterator: (parallel_id_object) => {
-		parallel_id_object = {bhs, lxx, kjv}
-	},
-	word_iterator: prepare_word_iterator()
+	word_features: word_features,
+	text_iterator: prepare_text_iterator,
+	word_iterator: prepare_word_iterator
 }
