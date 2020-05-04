@@ -30,3 +30,5 @@ options:
 
 **BHS (Tagged Hebrew [parsing + syntax trees])**:<br />
 Eep Talstra Centre for Bible and Computer. See <https://etcbc.github.io/bhsa/>.
+
+ - Accents: Work by Cody Kingham (<https://github.com/ETCBC/heads/blob/master/wordsets/accents.py>). See also <https://github.com/openscriptures/morphhb/blob/master/structure/OshbVerse/Script/AccentCatalog.js>.
