@@ -9,6 +9,8 @@
 
 ## Content
 
+### BHSA
+
 BHS(A) (Biblia Hebraica Stuttgartensia (Amstelodamensis)).
 
 > The text is based on the Biblia Hebraica Stuttgartensia edited by Karl Elliger and Wilhelm Rudolph, Fifth Revised Edition, edited by Adrian Schenker, © 1977 and 1997 Deutsche Bibelgesellschaft, Stuttgart.
@@ -16,7 +18,7 @@ BHS(A) (Biblia Hebraica Stuttgartensia (Amstelodamensis)).
 
 The BHS is based on the WLC but where BHSA differs, the BHS is the base text. This source includes tagging for morphology and syntax. Ketivs are unpointed. Pointing and parsing is provided for Qeres.
 
-Enrichments include:
+### Enrichments:
 
  - Accent Data (name + disjunctive/conjunctive)
  - Semantic Domain
