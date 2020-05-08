@@ -1,29 +1,27 @@
-# LXX DATA PIPELINE
+# Data Source
 
-Combine LXX data from wherever it can be found for use on parabible.
+| | Notes |
+| --- | --- |
+| **Content** | Rahlfs LXX |
+| **Source** | <http://ccat.sas.upenn.edu/gopher/text/religion/biblical/lxxmorph/> |
+| **Format** | Plain Text + BETA code + Custom Parsing |
+| **License** | Fill out User Declaration <http://ccat.sas.upenn.edu/gopher/text/religion/biblical/lxxmorph/0-user-declaration.txt> |
 
----
+## Content
 
-## Introduction
+### Rahlfs LXX
 
-This repository builds the LXX data used by Parabible. It draws from a number of different sources:
+> Septuaginta, ed. A. Rahlfs (Stuttgart: WŸrttembergische Bibelanstalt, 1935; repr. in 9th ed., 1971).
+> <http://ccat.sas.upenn.edu/gopher/text/religion/biblical/lxxmorph/0-readme.txt>
 
- - CCAT data from http://ccat.sas.upenn.edu/gopher/text/religion/biblical/lxxmorph/
- - Parallel data from Michael Stead's http://www.biblecrawler.org/
- - Lemma and gloss data from https://github.com/openscriptures/GreekResources.git
+Abbreviations:
 
-## Useful Data
+ - **CCAT**: Center for Computer Analysis of Texts
+ - **CATSS**: Computer Assisted Tools for Septuagint/Scriptural Study (cf. <http://ccat.sas.upenn.edu/rak//catss.html>)
 
-This pipeline has been specifically designed with parabible in mind. There are a number of useful pieces of output along the way, however.
+The CATSS data includes *parsing* and *lemmatisation* for Rahlf's LXX text. There are (a lot of) mistakes in CATSS data. It is worth trying to fix as many of them as possible augmenting with James Tauber's work... 
 
-This is especially true of the generated `output/lxx.db`. This file is a sqlite3 database. Every row represents a word in the LXX. What is particularly useful about it is that it brings together formatted CCAT data (in unicode, not BETAcode) and the Lemma and Gloss data from OpenScriptures (see above).
+### Enrichments
 
-You will also find a less intuitive json map of lxx verses by Hebrew verse reference in the output folder which is useful but a little more opaque.
-
-## How to Use
-
-You will need to locate `biblecrawler.s3db` on your own through the link to Michael Stead's BibleCrawler above. Place this file into the `/data` directory and you're good to go. Hopefully all you need to do now is:
-
-```sh
-    ./setup.sh
-```
+ - Normalised Lemmas (to cross-search the NT)
+ - Glosses (should these be normalised too, if possible?)
