@@ -24,6 +24,11 @@ options:
 
  - Node (probably >= 6)
  - Python 3.6 (for tf-bhs)
+ - Postgres database
+
+## Setting up a Database
+
+If you have docker installed, setting up a database is easy. There is a `run.sh` script in the `/postgres` folder which executes a very simple docker command which creates a postgres database in a container called `parabible-db`. It will also expose port `5432`. The default username/password is `admin@topsecret`; you may want to change those...
 
 ## Attribution:
 
