@@ -28,7 +28,13 @@ options:
 
 ## Setting up a Database
 
-If you have docker installed, setting up a database is easy. There is a `run.sh` script in the `/postgres` folder which executes a very simple docker command which creates a postgres database in a container called `parabible-db`. It will also expose port `5432`. The default username/password is `admin@topsecret`; you may want to change those...
+If you have docker installed, setting up a database is easy. There is a `run.sh` script in the `/postgres` folder which executes a very simple docker command. It will create a pg database in a container called `parabible-db` and expose port `5432`. The default username/password is `admin@topsecret`; you may want to change those...
+
+```
+sh postgres/run.sh
+```
+
+Additionally, note that data will be stored in `postgres/data`.
 
 ## Attribution:
 
