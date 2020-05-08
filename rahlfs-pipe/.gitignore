@@ -1,0 +1,7 @@
+node_modules
+helpers/lxxparse
+data/biblecrawler.s3db
+data/lxx_files
+data/GreekResources
+data/allwords.json
+output/
