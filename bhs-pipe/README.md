@@ -1,5 +1,7 @@
 # Data Source
 
+| | Notes |
+| --- | --- |
 | **Content** | BHS(A) (Biblia Hebraica Stuttgartensia (Amstelodamensis)) |
 | **Source** | <https://github.com/ETCBC/bhsa> |
 | **Format** | Text-Fabric (<https://github.com/Dans-labs/text-fabric>) |
