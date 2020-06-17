@@ -20,6 +20,7 @@ The BHS is based on the WLC but where BHSA differs, the BHS is the base text. Th
 
 ### Enrichments:
 
+ - Simple (Coarse) Genre Labels from Syntatic Variation Project (<https://github.com/ETCBC/genre_synvar/>)
  - Accent Data (name + disjunctive/conjunctive)
  - Semantic Domain
  - LXX Lexeme
