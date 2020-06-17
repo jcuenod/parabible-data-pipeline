@@ -59,6 +59,7 @@ feature_functions = {
     
     "has_pronominal_suffix": lambda n: "Y" if F.g_prs_utf8.v(n) != "" else None,
     "phrase_function": lambda n: F.function.v(L.u(n, otype='phrase')[0]),
+    # TODO: "genre" from https://github.com/ETCBC/genre_synvar/
     # TODO: "sdbh": lambda n: F.sdbh.v(n),
     # TODO: "lxx_lexeme": lambda n: F.lxxlexeme.v(n),
     # TODO: "accent": lambda n: F.accent.v(n),
