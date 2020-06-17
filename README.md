@@ -1,6 +1,6 @@
 # Readme
 
-**Note: this is a WIP but I think there's a good chance we'll get to something meaningful given the fact that <parabible.com> is already using this data...**
+**Note: this is a WIP but I think there's a good chance we'll get to something meaningful given the fact that <https://parabible.com> is already using this data...**
 
 ## Usage:
 
