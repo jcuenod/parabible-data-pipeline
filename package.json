@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/jcuenod/parabible-data-pipeline#readme",
   "dependencies": {
-    "better-sqlite3": "^7.0.1",
+    "better-sqlite3": "^7.1.0",
     "pg": "^8.0.3"
   }
 }
