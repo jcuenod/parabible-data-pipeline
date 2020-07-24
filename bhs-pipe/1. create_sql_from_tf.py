@@ -64,6 +64,7 @@ feature_functions = {
     # TODO: "lxx_lexeme": lambda n: F.lxxlexeme.v(n),
     # TODO: "accent": lambda n: F.accent.v(n),
     # TODO: "accent_quality": lambda n: F.accent_quality.v(n),
+    # TODO: "transliteration": <use the npm package from Chris Loder>
     # MAYBE: `rela` seems to be similar to `function` - might be worth adding
     # DON'T BOTHER: qere_trailer_utf8"
     "phrase_node_id": lambda n: L.u(n, otype="phrase")[0],
