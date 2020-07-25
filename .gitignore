@@ -1,7 +1,6 @@
 openscriptures-GreekResources
-tf-accent-data-git
-*/**__pycache__
+*/**/**__pycache__
 node_modules/
 postgres/data
-swete-pipe/lxx-swete
+gk-swete-pipe/lxx-swete
 */source-repository
