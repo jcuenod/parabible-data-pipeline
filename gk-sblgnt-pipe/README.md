@@ -9,7 +9,7 @@
 
 ## Content
 
-### Rahlfs LXX
+### SBL Greek New Testament
 
 > The SBLGNT is edited by Michael W. Holmes, who utilized a wide range of printed editions, all the major critical apparatuses, and the latest technical resources and manuscript discoveries as he established the text. The result is a critically edited text that differs from the Nestle-Aland/United Bible Societies text in more than 540 variation units.
 > <http://sblgnt.com/>
