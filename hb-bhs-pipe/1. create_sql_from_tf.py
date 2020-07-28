@@ -10,7 +10,7 @@ conn = sqlite3.connect(sqlFile)
 c = conn.cursor()
 
 # Remove checkout=local if you haven't updated the data files in a while
-A = use('bhsa', hoist=globals(), checkout='local')
+A = use('bhsa:v1.2', hoist=globals(), checkout='local')
 
 
 def nullifyNaAndEmptyAndUnknown(list_to_reduce):
