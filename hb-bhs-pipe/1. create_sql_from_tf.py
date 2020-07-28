@@ -147,8 +147,9 @@ if len(values) > 0:
 
 c.execute("SELECT DISTINCT(rid) FROM words ORDER BY rid")
 rids = c.fetchall()
-rid_list = list(map(lambda args: {"value": args[0] + 1, "rid": args[1][0]}, enumerate(rids)))
-c.executemany('UPDATE test SET verse_node_id=:value WHERE rid=:rid', rid_list)
+rid_list = list(map(lambda args: {"value": args[0], "rid": args[1][0]}, enumerate(rids)))
+print(rid_list)
+c.executemany('UPDATE words SET verse_node_id=:value WHERE rid=:rid', rid_list)
 conn.commit()
 
 conn.close()
