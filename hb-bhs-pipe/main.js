@@ -26,6 +26,7 @@ const sqlite = require('better-sqlite3')
 const db = sqlite(sqlOutputFile)
 
 const prepare_word_iterator = ({node_offset}) => {
+	console.log("Selecting BHS words...")
 	const rows = db.prepare('SELECT * FROM words').all()
 	function* word_iterator() {
 		for (let i = 0; i < rows.length; i++) {
