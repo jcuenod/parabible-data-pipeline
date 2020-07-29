@@ -2,6 +2,8 @@
 
 Right now it seems that our best bet is to use the STEPBible data. It provides a verse-by-verse mapping between the NRSV (?) and the "original". This means more work will need to be done to map the LXX (and JPS) but some of that data is in the repo (we'll just have to parse it and one of the advantages of this `.ods` was that it wouldn't require much work to transform).
 
+On the other hand, the CCEL data does have LXX mappings. Perhaps the best thing to do is actually to make a comparison and see where they differ first.
+
 ## Standard Bible and Paratext 'original' Bible verse-by-verse.ods
 
 | Filename | Standard Bible and Paratext 'original' Bible verse-by-verse.ods |
