@@ -14,3 +14,6 @@
 > The SBLGNT is edited by Michael W. Holmes, who utilized a wide range of printed editions, all the major critical apparatuses, and the latest technical resources and manuscript discoveries as he established the text. The result is a critically edited text that differs from the Nestle-Aland/United Bible Societies text in more than 540 variation units.
 > <http://sblgnt.com/>
 
+## Enrichments
+
+- **Sentences**: James Tauber (of course) has sentences for the SBLGNT at <https://github.com/jtauber/vocabulary-tools/tree/master/gnt_data>
