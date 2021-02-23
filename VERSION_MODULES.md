@@ -29,9 +29,9 @@ The versification schema enables the importer to align verses across versions. A
 
 ## `<module-name>.sqlite`
 
-In the case of the BHS in the `version.json` above, if the root folder for the BHS importer is `hb-bhs-pipe`, the importer expects to find `hb-bhs-pipe/output/hb-bhs-pipe.sqlite`.
+In the case of the BHS in the `version.json` above, if the root folder for the BHS importer is `hb-bhs-pipe`, the importer expects to find `hb-bhs-pipe/output/hb-bhs-pipe.sqlite`. Assuming that the module is a tagged dataset, there are two tables: `word_features` and `verse_text`
 
-The schema for `<module-name>.sqlite` is as follows:
+The schema for `word_features` is as follows:
 
 | field | description |
 |---|---|
@@ -42,9 +42,32 @@ The schema for `<module-name>.sqlite` is as follows:
 | trailer | Any punctuation etc. that succeeds the word |
 | *attribute* | Word attributes |
 | *syntax*_node | `sentence`, `clause`, `phrase`, `verse`  |
-| parallel_id | Versioned parallel id |
+| versioned_rid | Reference id based on the relevant versification system |
 
-The importer will add a `unversioned_parallel_id` based on the versification schema in `version.json`. To generate a `parallel_id`, use `alignment/generate_versioned_parallel_id.js`, passing in a reference and the versification schema to get an id.
+The importer will add an unversioned `parallel_id` based on the versification schema in `version.json`. To generate a `versioned_rid`, use `alignment/generate_versioned_parallel_id.js`, passing in a reference and the versification schema to get an id.
+
+The schema for `verse_text` is much simpler:
+
+| field | description |
+|---|---|
+| version_id | The version id of the corpus   |
+| versioned_rid | Reference id based on the relevant versification system |
+| text | JSON string containing a verse text array[*](*) |
+
+The importer will add an unversioned `parallel_id` based on the versification schema in `version.json`.
+
+[*] Verse text array is in the format (minified):
+
+```json
+[
+  {
+    "wid": integer,
+    "word": string,
+    "trailer": string
+  }
+]
+```
+
 
 ## Understanding Versification Schemas
 
