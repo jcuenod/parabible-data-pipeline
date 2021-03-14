@@ -50,7 +50,8 @@ The schema for `verse_text` is much simpler:
 
 | field | description |
 |---|---|
-| version_id | The version id of the corpus   |
+| version_id | The version id of the corpus |
+| versification_schema | The versification schema of the corpus |
 | versioned_rid | Reference id based on the relevant versification system |
 | text | JSON string containing a verse text array[*](*) |
 
