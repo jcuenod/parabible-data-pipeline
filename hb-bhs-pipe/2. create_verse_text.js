@@ -1,7 +1,7 @@
 const sqlite = require("sqlite3")
 
 const INSERT_LIMIT = 5000
-const db = new sqlite.Database('./output/bhs.sqlite')
+const db = new sqlite.Database('./output/data.sqlite')
 
 const drop_table = `
 DROP TABLE IF EXISTS verse_text;`
@@ -77,5 +77,5 @@ const module_data = {
     "versification_schema": "bhs",
     "license": "Attribution-NonCommercial 4.0 International (<a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>)",
     "url": "http://dx.doi.org/10.17026%2Fdans-z6y-skyh"
-   }
-fs.writeFileSync("./output/bhs.json", JSON.stringify(module_data), "utf-8")
+}
+fs.writeFileSync("./output/version.json", JSON.stringify(module_data), "utf-8")
