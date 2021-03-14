@@ -89,16 +89,15 @@ def sql_type(key):
     return "INTEGER" if key.endswith("_node_id") else "TEXT"
 
 drop_table_sql = """
-DROP TABLE IF EXISTS words
+DROP TABLE IF EXISTS word_features
 """
 fields = list(feature_functions.keys())
 fields.remove("wid")
 field_sql = ",\n    ".join(f'{k} {sql_type(k)}' for k in fields)
 create_table_sql = f"""
-CREATE TABLE words (
+CREATE TABLE word_features (
     wid INTEGER PRIMARY KEY,
-    {field_sql},
-    verse_node_id INTEGER
+    {field_sql}
 )
 """
 c.execute(drop_table_sql)
@@ -107,7 +106,7 @@ c.execute(create_table_sql)
 fields_values = ", ".join(fields)
 def do_insert(values_string):
     insert_sql = f"""
-    INSERT INTO words (wid, {fields_values}) VALUES
+    INSERT INTO word_features (wid, {fields_values}) VALUES
     {values_string}
     """
     c.execute(insert_sql)
@@ -145,12 +144,13 @@ if len(values) > 0:
     print(" ... " + str(i))
     do_insert(",".join(values))
 
-c.execute("SELECT DISTINCT(rid) FROM words ORDER BY rid")
-rids = c.fetchall()
-rid_list = list(map(lambda args: {"value": args[0], "rid": args[1][0]}, enumerate(rids)))
-print(rid_list)
-c.executemany('UPDATE words SET verse_node_id=:value WHERE rid=:rid', rid_list)
-conn.commit()
+# No more arbitrarily numbered verse_node_id... (we'll add a parallel_id later)
+# c.execute("SELECT DISTINCT(rid) FROM words ORDER BY rid")
+# rids = c.fetchall()
+# rid_list = list(map(lambda args: {"value": args[0], "rid": args[1][0]}, enumerate(rids)))
+# print(rid_list)
+# c.executemany('UPDATE words SET verse_node_id=:value WHERE rid=:rid', rid_list)
+# conn.commit()
 
 conn.close()
 print("Done!")
