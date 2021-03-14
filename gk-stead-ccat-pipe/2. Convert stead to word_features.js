@@ -25,6 +25,7 @@ const verse_texts = [];
 	let verse_text = []
 	let wid = 0
 	console.log("Reading words...")
+	// lxxmorph also has a bunch of apocryphal stuff so "< 40000000" excludes
 	db.each(`SELECT * FROM lxxmorph WHERE VersecodeLXX < 40000000`, (err, row) => {
 		const rid = +row["VersecodeLXX"]
 		if (rid !== current_verse) {
