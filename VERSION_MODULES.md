@@ -3,7 +3,7 @@
 A version module supplies two files at `<module-name>/output/` to be consumed by the importer:
 
 1. A json file with version information in `version.json`
-1. A sqlite database called `<module-name>.sqlite`.
+1. A sqlite database called `data.sqlite`.
 
 ## `version.json`
 
@@ -29,7 +29,7 @@ The versification schema enables the importer to align verses across versions. A
 
 ## `<module-name>.sqlite`
 
-In the case of the BHS in the `version.json` above, if the root folder for the BHS importer is `hb-bhs-pipe`, the importer expects to find `hb-bhs-pipe/output/hb-bhs-pipe.sqlite`. Assuming that the module is a tagged dataset, there are two tables: `word_features` and `verse_text`
+In the case of the BHS in the `version.json` above, if the root folder for the BHS importer is `hb-bhs-pipe`, the importer expects to find `hb-bhs-pipe/output/data.sqlite`. Assuming that the module is a tagged dataset, there are two tables: `word_features` and `verse_text`
 
 The schema for `word_features` is as follows:
 

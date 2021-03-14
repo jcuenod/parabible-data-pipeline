@@ -3,6 +3,10 @@
 
 -- Versecode, VerseID, Book, Chapter, Verse, VerseIDORG, ORGChapter, ORGVerse, VerseIDLXX, LXXBook, LXXChapter, LXXVerse, VerseIDVul, VULChapter, VULVerse, VersecodeORG, VersecodeLXX, VersecodeVUL1
 
+
+
+
+
 -- 
 -- TO EXECUTE:
 -- sqlite3 -header -csv ../../BibleCrawler.s3db  < extract_biblecrawler_parallel_data.sql > data.csv
@@ -11,10 +15,10 @@
 
 DROP TABLE IF EXISTS versification_for_parabible;
 
-CREATE TABLE versification_for_parabible AS SELECT Versecode as kjv_rid, VersecodeORG as bhs_rid, VersecodeORG as gnt_rid, VersecodeLXX as lxx_rid, VersecodeVUL as vul_rid FROM versification;
+CREATE TABLE versification_for_parabible AS SELECT Versecode as kjv, VersecodeORG as bhs, VersecodeORG as gnt, VersecodeLXX as lxx, VersecodeVUL as vul FROM versification;
 
-UPDATE versification_for_parabible SET bhs_rid = "" WHERE CAST(kjv_rid as INTEGER) >= 100000000;
-UPDATE versification_for_parabible SET gnt_rid = "" WHERE CAST(kjv_rid as INTEGER) < 100000000;
+UPDATE versification_for_parabible SET bhs = "" WHERE CAST(kjv as INTEGER) >= 100000000;
+UPDATE versification_for_parabible SET gnt = "" WHERE CAST(kjv as INTEGER) < 100000000;
 
 SELECT * FROM versification_for_parabible;
 
