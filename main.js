@@ -11,20 +11,14 @@ const foundImports = files.filter(file =>
 )
 console.log(foundImports)
 
-// // Make temporary duplicates...
-// if (!fs.existsSync(`./tmp`)) {
-// 	fs.mkdirSync("./tmp")
-// }
-// else {
-// 	// Remove any old stuff lying around in there...
-// 	const files = fs.readdirSync("./tmp/")
-// 	files.forEach(file => {
-// 		fs.rmSync(`./tmp/${file}`)
-// 	})
-// }
-// foundImports.forEach(versionPath => {
-// 	fs.copyFileSync(`./${versionPath}/output/data.sqlite`, `./tmp/${versionPath}.sqlite`)
-// })
+// Make temporary duplicates...
+if (fs.existsSync(`./tmp`)) {
+	fs.rmdirSync("./tmp", { recursive: true })
+}
+fs.mkdirSync("./tmp")
+foundImports.forEach(versionPath => {
+	fs.copyFileSync(`./${versionPath}/output/data.sqlite`, `./tmp/${versionPath}.sqlite`)
+})
 
 
 
@@ -59,8 +53,36 @@ WHERE
 LIMIT 1;
 `, 2)
 
+
+const featuresSet = new Set(["version_id", "wid", "text", "trailer", "rid", "parallel_id"])
+pg.querySync(`
+	DROP TABLE IF EXISTS word_features;
+`)
+pg.querySync(`
+	CREATE TABLE word_features (
+		version_id INTEGER NOT NULL,
+		wid INTEGER NOT NULL,
+		text TEXT,
+		trailer TEXT,
+		rid INTEGER NOT NULL,
+		parallel_id INTEGER NOT NULL
+	)
+`)
+
+const addFeatures = features =>
+	features.forEach(f => {
+		if (!featuresSet.has(f)) {
+			pg.querySync(`
+			ALTER TABLE word_features
+			ADD COLUMN ${f} TEXT
+			`)
+			featuresSet.add(f)
+		}
+	})
+
+
 const versionData = {
-	versificationSchemas: ["lxx"],
+	versificationSchemas: [],
 	versions: []
 }
 const getVersificationId = v => {
@@ -107,6 +129,8 @@ let rowImportCounter = 0
 let versionImportCounter = 0;
 // Process each version...
 foundImports.forEach(versionPath => {
+	const ridToParallelId = {}
+
 	const versionJson = fs.readFileSync(`./${versionPath}/output/version.json`)
 	const version = JSON.parse(versionJson)
 	version.versificationId = getVersificationId(version.versification_schema)
@@ -116,8 +140,8 @@ foundImports.forEach(versionPath => {
 
 	console.log("-- query sqlite and doing inserts to pg --")
 	const db = sqlite(`./tmp/${versionPath}.sqlite`)
-	const stmt = db.prepare('SELECT * FROM verse_text ORDER BY rid;')
-	for (const row of stmt.iterate()) {
+	const vtStmt = db.prepare('SELECT * FROM verse_text ORDER BY rid;')
+	for (const row of vtStmt.iterate()) {
 		let parallel_id = 0
 		if (versionImportCounter === 0) {
 			parallel_id = ++parallelId
@@ -132,7 +156,6 @@ foundImports.forEach(versionPath => {
 			})
 			if (parallel_id === -1) {
 				parallel_id = ++parallelId
-				console.log(parallel_id)
 			}
 		}
 		const pgrow = pg.executeSync("insert_parallel_verse_text", [
@@ -142,11 +165,41 @@ foundImports.forEach(versionPath => {
 			row.rid,
 			row.text
 		])
+		ridToParallelId[row.rid] = parallel_id
 		if (++rowImportCounter % 5000 === 0) {
 			console.log("another 5000...")
 		}
 	}
+
+
+	let cols = []
+	const wfStmt = db.prepare('SELECT * FROM word_features;')
+	let addedMissingFeatures = false
+	for (const row of wfStmt.iterate()) {
+		if (!addedMissingFeatures) {
+			cols = Object.keys(row)
+			cols.push("parallel_id")
+			cols.push("version_id")
+			addFeatures(cols)
+			addedMissingFeatures = true
+			// Prepare insert statement now that the missing columns are there...
+			console.log(`INSERT INTO word_features(${cols.join(",")}) VALUES (${cols.map((_, i) => `$${i + 1}`).join(",")});`)
+			pg.prepareSync(`wf_${versionPath}`,
+				`INSERT INTO word_features(${cols.join(",")}) VALUES (${cols.map((_, i) => `$${i + 1}`).join(",")});`,
+				cols.length)
+		}
+		row.parallel_id = ridToParallelId[row.rid]
+		row.version_id = version.versionId
+		row.rid = +row.rid
+		pg.executeSync(`wf_${versionPath}`, cols.map(k => row[k]))
+		if (++rowImportCounter % 25000 === 0) {
+			console.log("another 25000...")
+		}
+	}
+
 	versionImportCounter++
 	console.log(versionData)
 })
 console.log(versionData)
+
+fs.writeFileSync("./version_import_information.json", JSON.stringify(versionData), "utf-8")
