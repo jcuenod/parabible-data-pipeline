@@ -1,7 +1,7 @@
 const fs = require("fs")
 const exec = require("child_process").execSync
 
-const sqlOutputFile = `${__dirname}/output/bhs.sqlite`
+const sqlOutputFile = `${__dirname}/output/data.sqlite`
 const jsonOutputFile = `${__dirname}/output/word_features.json`
 
 console.log("Checking for prepopulated sqlite")
@@ -12,6 +12,7 @@ if (!fs.existsSync(sqlOutputFile) || !fs.existsSync(jsonOutputFile)) {
 	console.log(" - - Installing text-fabric")
 	result = exec("pip install text-fabric --user")
 	console.log(" - - Creating sqlite (will take a while)")
+	console.log(` - - python './1. create_sql_from_tf.py' ${sqlOutputFile} ${jsonOutputFile}`)
 	result = exec(`python './1. create_sql_from_tf.py' ${sqlOutputFile} ${jsonOutputFile}`)
 	// convert and show the output.
 	// console.log(result.toString("utf8");
