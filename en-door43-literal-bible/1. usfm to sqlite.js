@@ -6,6 +6,14 @@ const INSERT_LIMIT = 5000
 
 const fileStringFromPath = (filename) => fs.readFileSync(filename, "utf8")
 const csvToJson = filename => c2a(fileStringFromPath(filename))
+// Process lines individually to isolate problems in the csv
+// const csvToJson = filename => {
+// 	const lines = fileStringFromPath(filename)
+// 	const r = c2a(lines)
+// 	console.log(r)
+// 	return r
+// }
+
 
 console.log("Importing")
 const usfms = fs.readdirSync("./source-repository/").filter((f) => f.endsWith("usfm"))
@@ -62,13 +70,14 @@ const getRid = ({ book, chapter, verse }) =>
 	generateRid(rp.parse(`${book} ${chapter}:${verse}`))
 
 const csvs = fs.readdirSync("./csv-files/").filter(f => f.endsWith(".csv"))
-csvs.forEach(async filename => {
+csvs.forEach(filename => {
 	const content = csvToJson(`csv-files/${filename}`)
 	console.log(filename)
 	// Skip the first line (header)
 	const csvOutput = content.slice(1).map(([book, chapter, verse, text]) =>
 		[getRid({ book, chapter, verse }), text]
 	).filter(([rid, text]) => rid > 0 && !!text)
+	console.log(" ... verses:", csvOutput.length)
 	while (csvOutput.length > 0) {
 		const values = csvOutput.splice(0, INSERT_LIMIT)
 		const query = insert_into_verse_text(values)
