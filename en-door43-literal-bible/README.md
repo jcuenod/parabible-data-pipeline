@@ -19,3 +19,7 @@
 
 - The ULT has translation notes (see the translation-notes subfolder)
 - At times, the ULT has mappings to the underlying original languages (these mappings are packaged in the .usfm files)
+
+## Notes on Running
+
+The importer uses `execSync` to run the `usfm-grammar` node application (using `npx`). This was running into "out of memory" issues for me and so I run `npx` with `NODE_OPTIONS="--max-old-space-size=8192"`. This may mean that you need to run the script itself with expanded memory constraints.
