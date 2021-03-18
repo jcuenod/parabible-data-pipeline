@@ -15,3 +15,7 @@
 > <https://www.unfoldingword.org/ult>
 
 
+## Enrichments
+
+- The ULT has translation notes (see the translation-notes subfolder)
+- At times, the ULT has mappings to the underlying original languages (these mappings are packaged in the .usfm files)
