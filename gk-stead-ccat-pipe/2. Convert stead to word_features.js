@@ -28,9 +28,15 @@ let verse_text = []
 let wid = 1
 console.log("Transforming words...")
 
+const handleEsdrasRid = rid =>
+	Math.floor(rid / 1000000) === 16
+		? rid - 10000
+		: rid
+
+
 const selectStmt = inputDb.prepare(`SELECT * FROM lxxmorph WHERE CAST(VersecodeLXX AS INTEGER) < 40000000`)
 for (const row of selectStmt.iterate()) {
-	const rid = +row["VersecodeLXX"]
+	const rid = handleEsdrasRid(+row["VersecodeLXX"])
 	if (rid !== current_verse) {
 		verse_texts.push([current_verse, escapeSingleQuotes(JSON.stringify(verse_text))])
 		current_verse = rid
