@@ -92,7 +92,7 @@ const module_info = {
 	"name": "unfoldingWord® Literal Text",
 	"abbreviation": "ULT",
 	"versification_schema": "kjv",
-	"license": "CC-BY-SA License",
+	"license": "CC-BY-SA",
 	"url": "https://www.unfoldingword.org/ult"
 }
-fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")
+fs.writeFileSync("./output/version.json", JSON.stringify(module_info), "utf8")
