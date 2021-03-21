@@ -4,3 +4,4 @@ node_modules/
 postgres/data
 gk-swete-pipe/lxx-swete
 */source-repository
+tmp/
