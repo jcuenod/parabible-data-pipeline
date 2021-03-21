@@ -136,6 +136,7 @@ while (verse_texts.length > 0) {
 	const values = verse_texts.splice(0, INSERT_LIMIT)
 	const query = insert_into_verse_text(values)
 	const stmt = outputDb.prepare(query)
+	stmt.run()
 	verse_text_counter += values.length
 	console.log(verse_text_counter)
 }
@@ -144,6 +145,7 @@ while (words.length > 0) {
 	const values = words.splice(0, INSERT_LIMIT)
 	const query = insert_into_word_features(values)
 	const stmt = outputDb.prepare(query)
+	stmt.run()
 	word_features_counter += values.length
 	console.log(word_features_counter)
 }
