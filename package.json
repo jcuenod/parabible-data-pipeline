@@ -20,8 +20,12 @@
     "beta-code-js": "^2.0.2",
     "better-sqlite3": "^7.1.2",
     "ccat-parse": "^0.0.2",
+    "csv2array": "^0.0.4",
     "pg": "^8.0.3",
     "pg-native": "^3.0.0",
-    "sqlite3": "^5.0.1"
+    "referenceparser": "^1.1.5",
+    "sqlite3": "^5.0.1",
+    "uninstall": "^0.0.0",
+    "usfm-grammar": "^2.0.0-beta.9"
   }
 }
