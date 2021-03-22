@@ -1,0 +1,103 @@
+{
+    "psp": {
+        "ADV": "Adverb",
+        "CONJ": "Conjunction",
+        "COND": "Conditional",
+        "PRT": "Particle",
+        "PREP": "Preposition",
+        "INJ": "Interjection",
+        "ARAM": "Aramaic",
+        "HEB": "Hebrew",
+        "N-PRI": "Proper Noun",
+        "A-NUI": "Numeral",
+        "N-LI": "Letter",
+        "N-OI": "Noun",
+        "N-": "Noun",
+        "A-": "Adjective",
+        "R-": "Relative Pronoun",
+        "C-": "Reciprocal Pronoun",
+        "D-": "Demonstrative Pronoun",
+        "T-": "Article",
+        "K-": "Correlative Pronoun",
+        "I-": "Interrogative Pronoun",
+        "X-": "Indefinite Pronoun",
+        "Q-": "Correlative/Interrogative Pronoun",
+        "F-": "Reflexive Pronoun",
+        "S-": "Possessive Pronoun",
+        "P-": "Personal Pronoun",
+        "V-": "Verb"
+    },
+    "suffix": {
+        "-S": "Superlative",
+        "-C": "Comparative",
+        "-ABB": "Abbreviated",
+        "-I": "Interrogative",
+        "-N": "Negative",
+        "-ATT": "Attic",
+        "-P": "Attached particle",
+        "-K": "Crasis"
+    },
+    "case": {
+        "N": "Nom",
+        "V": "Voc",
+        "G": "Gen",
+        "D": "Dat",
+        "A": "Acc"
+    },
+    "number": {
+        "S": "sg",
+        "P": "pl"
+    },
+    "gender": {
+        "M": "Masc",
+        "F": "Fem",
+        "N": "Neut"
+    },
+    "tense": {
+        "P": "Pres",
+        "I": "Impf",
+        "F": "Fut",
+        "2F": "Fut",
+        "A": "Aor",
+        "2A": "Aor",
+        "R": "Perf",
+        "2R": "Perf",
+        "L": "Plupf",
+        "2L": "Plupf",
+        "X": "(no tense stated)"
+    },
+    "voice": {
+        "A": "Act",
+        "M": "Mid",
+        "P": "Pass",
+        "E": "Mid/Pass",
+        "D": "Mid",
+        "O": "Pass",
+        "N": "Mid/Pass",
+        "Q": "Act",
+        "X": "No Voice"
+    },
+    "mood": {
+        "I": "Ind",
+        "S": "Subj",
+        "O": "Opt",
+        "M": "Impv",
+        "N": "Inf",
+        "P": "Ptc",
+        "R": "Impv Ptc"
+    },
+    "extra": {
+        "-M": "middle significance",
+        "-C": "contracted",
+        "-T": "transitive",
+        "-A": "aeolic",
+        "-ATT": "attic",
+        "-AP": "apocopated",
+        "-IRR": "irregular/impure"
+    },
+    "person": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+    }
+}
