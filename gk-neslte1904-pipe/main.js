@@ -5,20 +5,7 @@ const INSERT_LIMIT = 25000
 const escapeSingleQuotes = str =>
     str.replace(/'/g, "''")
 
-
 const fs = require("fs")
-const libxmljs = require("libxmljs")
-const xmlContent = fs.readFileSync("./Nestle1904/xml/17-titus.xml", "utf8")
-console.log(xmlContent)
-const xmlDoc = libxmljs.parseXml()
-console.log(xmlDoc)
-
-
-
-
-process.exit()
-
-
 const csvFile = "./Nestle1904/morph/Nestle1904.csv"
 const lines = fs.readFileSync(csvFile, "utf8").split("\r\n")
 const header = lines.shift().split("\t")
@@ -55,6 +42,8 @@ const generateRid = (referenceString) => {
 }
 
 
+console.log("Building word list...")
+const punctuationMatch = /^([—\[\(]*)([\u0370-\u03FF\u1F00-\u1FFF]+)([’·.,()—\]]*)$/
 
 let currentRid = 0
 const verse_texts = []
@@ -63,9 +52,16 @@ const parse = require("./util/form_morph_codes.json")
 const cols = new Set([].concat(...Object.keys(parse).map(k => Object.keys(parse[k]))))
 cols.delete("case")
 cols.add("_case")
-nestle1904.forEach(([referenceString, text, funcMorph, formMorph, strongs, lemma, normalized], i) => {
+nestle1904.forEach(([referenceString, punctuatedWord, funcMorph, formMorph, strongs, lemma, normalized], i) => {
+    const simpleGreek = punctuationMatch.test(punctuatedWord)
+    if (!simpleGreek) {
+        console.log(referenceString, punctuatedWord)
+        process.exit()
+    }
+    const [_, prefix, text, trailer] = punctuatedWord.match(punctuationMatch)
+
     const wid = i + 1
-    const trailer = " "
+    const suffix = trailer + " "
     const rid = generateRid(referenceString)
     if (rid !== currentRid) {
         currentRid = rid
@@ -79,20 +75,23 @@ nestle1904.forEach(([referenceString, text, funcMorph, formMorph, strongs, lemma
     }
     const word = {
         wid,
+        prefix,
         text,
-        trailer,
+        suffix,
         realized_lexeme: lemma,
         ...parsing,
         rid
     }
 
     words_features.push(word)
-    verse_texts[verse_texts.length - 1][1].push({ wid, text, trailer })
+    verse_texts[verse_texts.length - 1][1].push({ wid, prefix, text, suffix })
 })
 
-console.log(verse_texts.length)
+console.log(" - words:", words_features.length)
+console.log(" - verses:", verse_texts.length)
 // console.log(verse_texts.slice(1000, 1010))
 
+console.log("\nBuilding DB...")
 // Set up sqlite for insertion
 const columns = [
     "wid",
@@ -121,21 +120,21 @@ CREATE TABLE verse_text (
 	text TEXT
 );`)
 
+console.log(" - VERSE TEXTS")
 const insert_into_verse_text = values => `
 INSERT INTO verse_text VALUES 
 ${values.map(v =>
     `(${v[0]}, '${escapeSingleQuotes(JSON.stringify(v[1]))}')`
 ).join(",")}`
-// Insert verse_texts
 while (verse_texts.length > 0) {
     const values = verse_texts.splice(0, INSERT_LIMIT)
     const query = insert_into_verse_text(values)
     const stmt = outputDb.prepare(query)
     stmt.run()
-    console.log(verse_texts.length)
+    console.log(" -- verses to go:", verse_texts.length)
 }
 
-
+console.log(" - WORD FEATURES")
 const insert_into_word_features = words => `
 INSERT INTO word_features VALUES
 ${words.map(w =>
@@ -152,5 +151,5 @@ while (words_features.length > 0) {
     const query = insert_into_word_features(values)
     const stmt = outputDb.prepare(query)
     stmt.run()
-    console.log(words_features.length)
+    console.log(" -- words to go:", words_features.length)
 }
