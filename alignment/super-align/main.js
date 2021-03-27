@@ -5,6 +5,9 @@ const sqlite = require("better-sqlite3")
 const inputDb = new sqlite("../biblecrawler/alignment.db")
 const outputDb = new sqlite("./output/data.sqlite")
 
+//For the NT
+const ult_align_path = "../ult-rids/ult_align.sqlite"
+
 const INSERT_LIMIT = 5000
 
 const output = []
@@ -15,12 +18,12 @@ for (const row of stmt.iterate()) {
     if (Object.values(row).includes("kjv")) {
         continue
     }
-    //Ignore stuff outside of canon for now
-    if (row["kjv"] && +row["kjv"] > 66000000 ||
-        row["bhs"] && +row["bhs"] > 66000000 ||
-        row["gnt"] && +row["gnt"] > 66000000 ||
-        row["lxx"] && +row["lxx"] > 66000000 ||
-        row["vul"] && +row["vul"] > 66000000) {
+    //Ignore stuff after the OT—SBL 2 lists no differences in the NT
+    if (row["kjv"] && +row["kjv"] >= 40000000 ||
+        row["bhs"] && +row["bhs"] >= 40000000 ||
+        row["gnt"] && +row["gnt"] >= 40000000 ||
+        row["lxx"] && +row["lxx"] >= 40000000 ||
+        row["vul"] && +row["vul"] >= 40000000) {
         continue
     }
     Object.keys(row).forEach(k => {
@@ -75,6 +78,16 @@ while (output.length > 0) {
     counter += values.length
     console.log(counter)
 }
+
+
+// IMPORT NT ALIGNMENT
+{
+    outputDb.exec(`
+        ATTACH '${ult_align_path}' AS db2;
+        INSERT INTO alignment (kjv,gnt) SELECT kjv,gnt FROM db2.alignment;
+    `)
+}
+
 
 outputDb.exec(`CREATE INDEX kjv_index ON alignment(kjv);`)
 outputDb.exec(`CREATE INDEX bhs_index ON alignment(bhs);`)
