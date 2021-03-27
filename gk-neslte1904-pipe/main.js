@@ -153,3 +153,16 @@ while (words_features.length > 0) {
     stmt.run()
     console.log(" -- words to go:", words_features.length)
 }
+
+
+console.log("\nWriting module data...")
+const module_data = {
+    "name": "Nestle Aland 1904",
+    "abbreviation": "Nestle1904",
+    "versification_schema": "gnt",
+    "license": "Public Domain",
+    "url": "https://github.com/biblicalhumanities/Nestle1904/"
+}
+fs.writeFileSync("./output/version.json", JSON.stringify(module_data), "utf-8")
+
+console.log("\nDone")
