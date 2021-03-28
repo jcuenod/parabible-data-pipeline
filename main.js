@@ -39,14 +39,15 @@ const Client = require('pg-native')
 
 const alignmentDb = sqlite("./alignment/super-align/output/data.sqlite")
 
-
+console.log("Checking for modules")
 const files = fs.readdirSync("./")
 const foundImports = files.filter(file =>
 	fs.existsSync(`./${file}/output/data.sqlite`) &&
 	fs.existsSync(`./${file}/output/version.json`)
 )
-console.log(foundImports)
+console.log("Found:", foundImports)
 
+console.log("Making `/tmp` duplicates")
 // Make temporary duplicates...
 if (fs.existsSync(`./tmp`)) {
 	fs.rmdirSync("./tmp", { recursive: true })
@@ -58,7 +59,7 @@ foundImports.forEach(versionPath => {
 
 
 
-
+console.log("\nSetting up DB")
 const pg = new Client()
 pg.connectSync('postgresql://postgres:toor@127.0.0.1:5432/parabibledb')
 pg.querySync(`
@@ -122,7 +123,7 @@ const addFeatures = features =>
 	})
 
 
-
+console.log("\nGetting schemas")
 // Get available versification schemas
 const alignmentStmts = {}
 const schemaRowStmt = alignmentDb.prepare(`SELECT * FROM alignment LIMIT 1;`)
@@ -155,6 +156,7 @@ const getParallelRid = ({ rid, versificationSchema, versificationSchemaId }) => 
 	return -1
 }
 
+console.log("\nInserting Modules")
 const versionJsonFields = [
 	"name", "abbreviation", "versification_schema", "license", "url"
 ]
