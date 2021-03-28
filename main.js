@@ -30,7 +30,7 @@ if (import_option !== "--reload-all") {
 }
 
 
-const INSERT_LIMIT = 5000
+const INSERT_LIMIT = 25000
 
 
 const fs = require("fs")
