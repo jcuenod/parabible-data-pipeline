@@ -24,6 +24,7 @@ usfms.forEach((filename) => {
 		console.log(outputFile, "cached")
 	}
 	catch (e) {
+		console.log(`NODE_OPTIONS="--max-old-space-size=8192" npx usfm-grammar -l relaxed source-repository/${filename} -o csv > csv-files/${outputFile}`)
 		execSync(
 			`NODE_OPTIONS="--max-old-space-size=8192" npx usfm-grammar -l relaxed source-repository/${filename} -o csv > csv-files/${outputFile}`
 		)
@@ -45,7 +46,7 @@ CREATE TABLE verse_text (
 const insert_into_verse_text = values => `
 INSERT INTO verse_text VALUES 
 ${values.map(v =>
-	`(${v[0]}, '${v[1]}')`
+	`(${v[0]}, '${v[1].replace(/'/g, "''")}')`
 ).join(",")}`
 
 
@@ -71,8 +72,8 @@ const getRid = ({ book, chapter, verse }) =>
 
 const csvs = fs.readdirSync("./csv-files/").filter(f => f.endsWith(".csv"))
 csvs.forEach(filename => {
-	const content = csvToJson(`csv-files/${filename}`)
 	console.log(filename)
+	const content = csvToJson(`csv-files/${filename}`)
 	// Skip the first line (header)
 	const csvOutput = content.slice(1).map(([book, chapter, verse, text]) =>
 		[getRid({ book, chapter, verse }), text]
