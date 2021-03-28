@@ -140,7 +140,7 @@ const getParallelRid = ({ rid, versificationSchema, versificationSchemaId }) => 
 	const row = alignmentStmts[versificationSchema].get(rid)
 
 	for (key in row) {
-		if (versificationSchema === key || !row[key] || !availableVersificationSchemas.has(key))
+		if (!row[key] || !availableVersificationSchemas.has(key))
 			continue
 
 		const pid = pg.executeSync("select_parallel_id", [
