@@ -1,6 +1,7 @@
 const fs = require("fs")
-const { execSync } = require("child_process")
+// const { execSync } = require("child_process")
 const c2a = require("csv2array")
+const usfmToCsv = require("./usfm-to-csv")
 
 const INSERT_LIMIT = 5000
 
@@ -18,17 +19,15 @@ const csvToJson = filename => c2a(fileStringFromPath(filename))
 console.log("Importing")
 const usfms = fs.readdirSync("./source-repository/").filter((f) => f.endsWith("usfm"))
 usfms.forEach((filename) => {
-	const outputFile = filename.replace("usfm", "csv")
+	const input = `source-repository/${filename}`
+	const output = `csv-files/${filename.replace("usfm", "csv")}`
 	try {
-		fs.statSync(`csv-files/${outputFile}`)
-		console.log(outputFile, "cached")
+		fs.statSync(output)
+		console.log(output, "cached")
 	}
 	catch (e) {
-		console.log(`NODE_OPTIONS="--max-old-space-size=8192" npx usfm-grammar -l relaxed source-repository/${filename} -o csv > csv-files/${outputFile}`)
-		execSync(
-			`NODE_OPTIONS="--max-old-space-size=8192" npx usfm-grammar -l relaxed source-repository/${filename} -o csv > csv-files/${outputFile}`
-		)
-		console.log(outputFile, "done")
+		usfmToCsv({input, output})
+		console.log(output, "done")
 	}
 })
 
