@@ -1,5 +1,4 @@
 const fs = require("fs")
-// const { execSync } = require("child_process")
 const c2a = require("csv2array")
 const usfmToCsv = require("./usfm-to-csv")
 
