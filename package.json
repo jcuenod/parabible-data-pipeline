@@ -2,7 +2,7 @@
   "name": "parabible-data-pipeline",
   "version": "1.0.0",
   "description": "## Usage:",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,6 +26,6 @@
     "referenceparser": "^1.1.5",
     "sqlite3": "^5.0.1",
     "uninstall": "^0.0.0",
-    "usfm-grammar": "^2.0.0-beta.9"
+    "usfm-js": "^2.1.0"
   }
 }
