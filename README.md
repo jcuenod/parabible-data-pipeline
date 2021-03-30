@@ -58,5 +58,5 @@ Modules that have at least partially functioning data ready for import include:
 - [x] UnfoldingWord Simplified Translation
 - [ ] NET
 - [ ] ESV (charges a licensing fee)
-- [ ] JPS
+- [x] JPS
 - [ ] Chinese (not finalised on which translation to use)
