@@ -61,7 +61,8 @@ foundImports.forEach(versionPath => {
 
 console.log("\nSetting up DB")
 const pg = new Client()
-pg.connectSync('postgresql://postgres:toor@127.0.0.1:5432/parabibledb')
+const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres:toor@127.0.0.1:5432/parabibledb"
+pg.connectSync(DATABASE_URL)
 pg.querySync(`
 	DROP TABLE IF EXISTS module_info;
 `)
