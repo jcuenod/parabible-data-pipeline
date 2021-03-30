@@ -5,7 +5,7 @@ const usfmToCsv = require("./usfm-to-csv")
 const INSERT_LIMIT = 5000
 
 const fileStringFromPath = (filename) => fs.readFileSync(filename, "utf8")
-const csvToJson = filename => c2a(fileStringFromPath(filename))
+const loadCsvFile = filename => c2a(fileStringFromPath(filename))
 // Process lines individually to isolate problems in the csv
 // const csvToJson = filename => {
 // 	const lines = fileStringFromPath(filename)
@@ -71,7 +71,7 @@ const getRid = ({ book, chapter, verse }) =>
 const csvs = fs.readdirSync("./csv-files/").filter(f => f.endsWith(".csv"))
 csvs.forEach(filename => {
 	console.log(filename)
-	const content = csvToJson(`csv-files/${filename}`)
+	const content = loadCsvFile(`csv-files/${filename}`)
 	// Skip the first line (header)
 	const csvOutput = content.slice(1).map(([book, chapter, verse, text]) =>
 		[getRid({ book, chapter, verse }), text]
