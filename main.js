@@ -35,7 +35,7 @@ const INSERT_LIMIT = 25000
 
 const fs = require("fs")
 const sqlite = require("better-sqlite3")
-const Client = require('pg-native')
+const Client = require("pg-native")
 
 const alignmentDb = sqlite("./alignment/super-align/output/data.sqlite")
 
@@ -87,7 +87,7 @@ pg.querySync(`
 		text TEXT
 	)
 `)
-pg.prepareSync('select_parallel_id', `
+pg.prepareSync("select_parallel_id", `
 SELECT parallel_id FROM parallel
 WHERE
 	(versification_schema_id = $1 AND
@@ -146,7 +146,7 @@ const getParallelRid = ({ rid, versificationSchema, versificationSchemaId }) => 
 
 		const pid = pg.executeSync("select_parallel_id", [
 			getVersificationId(key),
-			rid
+			rid,
 		])
 
 		if (pid[0] && "parallel_id" in pid[0]) {
@@ -197,7 +197,7 @@ foundImports.forEach((versionPath, importIteration) => {
 	console.log("--- parallel text")
 	{
 		console.log("--- - building row list")
-		const vtStmt = db.prepare('SELECT * FROM verse_text ORDER BY rid;')
+		const vtStmt = db.prepare("SELECT * FROM verse_text ORDER BY rid;")
 		const rows = []
 		for (const row of vtStmt.iterate()) {
 			let parallel_id = 0
@@ -210,7 +210,7 @@ foundImports.forEach((versionPath, importIteration) => {
 				parallel_id = +getParallelRid({
 					rid: row.rid,
 					versificationSchemaId: version.versificationId,
-					versificationSchema: version.versification_schema
+					versificationSchema: version.versification_schema,
 				})
 				if (parallel_id === -1) {
 					parallel_id = ++parallelId
@@ -221,7 +221,7 @@ foundImports.forEach((versionPath, importIteration) => {
 				version.versificationId,
 				version.versionId,
 				row.rid,
-				row.text
+				row.text,
 			])
 			ridToParallelId[row.rid] = parallel_id
 			if (rows.length % 2000 === 0) {
@@ -249,7 +249,7 @@ foundImports.forEach((versionPath, importIteration) => {
 		let cols = []
 		let wfStmt
 		try {
-			wfStmt = db.prepare('SELECT * FROM word_features;')
+			wfStmt = db.prepare("SELECT * FROM word_features;")
 		}
 		catch (e) {
 			console.log("--- Couldn't SELECT from word_features on " + version.name)
