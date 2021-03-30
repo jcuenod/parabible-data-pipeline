@@ -1,30 +1,37 @@
 # Readme
 
-**Note: this is a WIP but I think there's a good chance we'll get to something meaningful given the fact that <https://parabible.com> is already using this data...**
+**Note: This is an active WIP**
 
 ## Usage:
 
-gonna be something like:
+Usage currently supported is:
 
 ```
-node main.js pgdb pgusername
+DATABASE_URL="postgres://username:password@host:port/db" \
+node main.js --reload-all
 ```
+
+Modules are expected to be in subfolders in the root directory but one day this will also be an environmental variable.
 
 Should prompt for password and clear database
 
 Should fill with data from cache according to options
 
-options:
+Possible options (in some imaginary future version):
 
-`--rebuild <version> [<version>...]`
-
-> Will rebuild <version> even if it finds cached stuff there. I have no intention of keeping track with whether the cached stuff is up to date with the latest coded version.
+```
+  --reload-all   - Clear the db and do import each module.
+  --load-new     - Check for available modules and load anything new.
+  --load-one     - Expects a name as the next parameter. Deletes and reloads module.
+  --clear-all    - Delete everything from the db.
+```
 
 ## Requirements:
 
- - Node (probably >= 6)
- - Python 3.6 (for tf-bhs)
+ - Node 12 (the last version better-sqlite3 works with)
  - Postgres database
+
+You'll need to set up the modules on your own...
 
 ## Setting up a Database
 
@@ -36,12 +43,20 @@ sh postgres/run.sh
 
 Additionally, note that data will be stored in `postgres/data`.
 
-## Attribution:
+## Modules
 
-**Parallel Versification**:<br />
-`references.sqlite` is derived from CCEL (but I can't find live sources for the original files any more) by Adam Baker at <https://github.com/adamb924/references-in-sqlite>.
+At this stage nomenclature is not consistent but it will stabilise (I think to "modules"). Eventually, individual modules will be broken out into their own repos but it started here so it's here for now. This means that the root `package.json` is full of packages that are actually there for the sake of particular modules rather than the main importer.
 
-**BHS (Tagged Hebrew [parsing + syntax trees])**:<br />
-Eep Talstra Centre for Bible and Computer. See <https://etcbc.github.io/bhsa/>.
+Modules that have at least partially functioning data ready for import include:
 
- - Accents: Work by Cody Kingham (<https://github.com/ETCBC/heads/blob/master/wordsets/accents.py>). See also <https://github.com/openscriptures/morphhb/blob/master/structure/OshbVerse/Script/AccentCatalog.js>.
+- [x] BHSA
+- [x] Nestle1904
+- [ ] SBLGNT
+- [x] Rahlfs LXX (Using Stead's import)
+- [ ] Swete LXX
+- [x] UnfoldingWord Literal Translation
+- [x] UnfoldingWord Simplified Translation
+- [ ] NET
+- [ ] ESV (charges a licensing fee)
+- [ ] JPS
+- [ ] Chinese (not finalised on which translation to use)
