@@ -293,3 +293,7 @@ foundImports.forEach((versionPath, importIteration) => {
 		}
 	}
 })
+
+pg.querySync(`CREATE INDEX ON word_features (version_id, wid)`)
+pg.querySync(`CREATE INDEX ON parallel (version_id, rid)`)
+pg.querySync(`CREATE INDEX ON parallel (parallel_id, version_id)`)
