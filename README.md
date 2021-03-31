@@ -59,4 +59,6 @@ Modules that have at least partially functioning data ready for import include:
 - [ ] NET
 - [ ] ESV (charges a licensing fee)
 - [x] JPS
-- [ ] Chinese (not finalised on which translation to use)
+- [x] CUNP (Chinese)
+- [ ] RCUV (Chinese - seems like a good option)
+- [ ] Spanish?
