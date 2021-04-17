@@ -7,6 +7,15 @@ const outputDb = new sqlite("./output/data.sqlite")
 
 const INSERT_LIMIT = 25000
 
+const patchMorphCode = code => {
+	if (code === "V  AI3P") {
+		// Mistake in CCAT data led to loss of "F" in Stead's data
+		return "V  FAI3P"
+	}
+
+	return code
+}
+
 
 const unifyDuplicateSpaces = str => {
 	const ret = str.replace("  ", " ")
@@ -21,7 +30,7 @@ const escapeSingleQuotes = str =>
 
 
 const words = []
-const verse_texts = [];
+const verse_texts = []
 
 let current_verse = 1001001
 let verse_text = []
@@ -47,7 +56,7 @@ for (const row of selectStmt.iterate()) {
 		console.log(row)
 		process.exit()
 	}
-	const morph = unifyDuplicateSpaces(row["CCATMorphology"])
+	const morph = unifyDuplicateSpaces(patchMorphCode(row["GrkMorphology"]))
 	const word = {
 		wid: wid++,
 		text: betaCodeToGreek(row["DisplayText"]),
