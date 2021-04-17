@@ -44,7 +44,7 @@ feature_functions = {
     "gloss": lambda n: F.gloss.v(L.u(n, otype='lex')[0]),
 
     "part_of_speech": convert_part_of_speech(lambda n: F.sp.v(n)),
-    "person": lambda n: F.ps.v(n)[1],
+    "person": lambda n: F.ps.v(n)[1] if F.ps.v(n) != "NA" else None,
     "number": lambda n: F.nu.v(n),
     "gender": lambda n: F.gn.v(n),
     "tense": lambda n: F.vt.v(n), # vt = verbal tense
