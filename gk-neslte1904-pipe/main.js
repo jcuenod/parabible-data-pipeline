@@ -51,17 +51,17 @@ const words_features = []
 const parse = require("./util/form_morph_codes.json")
 const cols = new Set([].concat(...Object.keys(parse).map(k => Object.keys(parse[k]))))
 cols.delete("case")
-cols.add("_case")
+cols.add("case_")
 nestle1904.forEach(([referenceString, punctuatedWord, funcMorph, formMorph, strongs, lemma, normalized], i) => {
     const simpleGreek = punctuationMatch.test(punctuatedWord)
     if (!simpleGreek) {
         console.log(referenceString, punctuatedWord)
         process.exit()
     }
-    const [_, prefix, text, trailer] = punctuatedWord.match(punctuationMatch)
+    const [_, leader, text, trailingPunc] = punctuatedWord.match(punctuationMatch)
 
     const wid = i + 1
-    const suffix = trailer + " "
+    const trailer = trailingPunc + " "
     const rid = generateRid(referenceString)
     if (rid !== currentRid) {
         currentRid = rid
@@ -70,21 +70,21 @@ nestle1904.forEach(([referenceString, punctuatedWord, funcMorph, formMorph, stro
     const parsing = parse[formMorph]
     delete parsing["tag"]
     if ("case" in parsing) {
-        parsing["_case"] = parsing["case"]
+        parsing["case_"] = parsing["case"]
         delete parsing["case"]
     }
     const word = {
         wid,
-        prefix,
+        leader,
         text,
-        suffix,
+        trailer,
         realized_lexeme: lemma,
         ...parsing,
         rid
     }
 
     words_features.push(word)
-    verse_texts[verse_texts.length - 1][1].push({ wid, prefix, text, suffix })
+    verse_texts[verse_texts.length - 1][1].push({ wid, leader, text, trailer })
 })
 
 console.log(" - words:", words_features.length)
@@ -95,6 +95,7 @@ console.log("\nBuilding DB...")
 // Set up sqlite for insertion
 const columns = [
     "wid",
+    "leader",
     "text",
     "trailer",
     "realized_lexeme",
@@ -106,6 +107,7 @@ DROP TABLE IF EXISTS word_features;`)
 outputDb.exec(`
 CREATE TABLE word_features (
   wid INTEGER,
+  leader TEXT,
   text TEXT,
   trailer TEXT,
   realized_lexeme TEXT,

@@ -7,9 +7,9 @@ const fields_by_line = lines.map(l => l.trim().split("\t"))
 
 const parsingAbbrMappings = require("./morph-abbreviation-mappings.json")
 const mapParsing = pObj => {
+    if ("tag" in pObj)
+        delete pObj["tag"]
     Object.keys(pObj).forEach(k => {
-        if (k === "tag")
-            return
         if (k in parsingAbbrMappings) {
             const v = pObj[k]
             pObj[k] = parsingAbbrMappings[k][v]
@@ -20,6 +20,10 @@ const mapParsing = pObj => {
             process.exit()
         }
     })
+    if ("psp" in pObj) {
+        pObj["part_of_speech"] = pObj["psp"]
+        delete pObj["psp"]
+    }
     return pObj
 }
 
