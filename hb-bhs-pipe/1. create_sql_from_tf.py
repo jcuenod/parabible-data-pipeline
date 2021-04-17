@@ -33,6 +33,16 @@ def convert_part_of_speech (part):
         return "noun"
     return part
 
+def convert_gender (gn):
+    if gn == "m":
+        return "masc"
+    elif gn == "f":
+        return "fem"
+    elif gn == "NA":
+        return None
+    else:
+        return gn
+
 feature_functions = {
     "wid": lambda n: int(n),
     "text": lambda n: F.g_word_utf8.v(n),
@@ -46,7 +56,7 @@ feature_functions = {
     "part_of_speech": convert_part_of_speech(lambda n: F.sp.v(n)),
     "person": lambda n: F.ps.v(n)[1] if F.ps.v(n) != "NA" else None,
     "number": lambda n: F.nu.v(n),
-    "gender": lambda n: F.gn.v(n),
+    "gender": lambda n: convert_gender(F.gn.v(n)),
     "tense": lambda n: F.vt.v(n), # vt = verbal tense
     "stem": lambda n: F.vs.v(n), # vs = verbal stem
 
