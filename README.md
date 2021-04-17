@@ -84,7 +84,7 @@ Modules that have at least partially functioning data ready for import include:
 - [ ] Swete LXX
 - [x] UnfoldingWord Literal Translation
 - [x] UnfoldingWord Simplified Translation
-- [ ] NET
+- [x] NET
 - [ ] ESV (charges a licensing fee)
 - [x] JPS
 - [x] CUNPS (Chinese Simplified)
