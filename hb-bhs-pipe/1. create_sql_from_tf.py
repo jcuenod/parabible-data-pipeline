@@ -28,8 +28,13 @@ def maybe_is_definite(n):
     definiteness = F.det.v(L.u(n, otype='phrase_atom')[0])
     return definite_qualities[definiteness]
 
+def convert_part_of_speech (part):
+    if part == "subs":
+        return "noun"
+    return part
+
 feature_functions = {
-    "wid": lambda n: n,
+    "wid": lambda n: int(n),
     "text": lambda n: F.g_word_utf8.v(n),
     "trailer": lambda n: F.trailer_utf8.v(n),
     "qere": lambda n: F.qere_utf8.v(n),
@@ -38,14 +43,14 @@ feature_functions = {
     "paradigmatic_lexeme": lambda n: F.g_lex_utf8.v(L.u(n, otype='lex')[0]),
     "gloss": lambda n: F.gloss.v(L.u(n, otype='lex')[0]),
 
-    "part_of_speech": lambda n: F.sp.v(n),
+    "part_of_speech": convert_part_of_speech(lambda n: F.sp.v(n)),
     "person": lambda n: F.ps.v(n)[1],
     "number": lambda n: F.nu.v(n),
     "gender": lambda n: F.gn.v(n),
     "tense": lambda n: F.vt.v(n), # vt = verbal tense
     "stem": lambda n: F.vs.v(n), # vs = verbal stem
 
-    "state": lambda n: F.st.v(n), # construct/absolute/emphatic
+    "state": lambda n: F.st.v(n).lower(), # construct/absolute/emphatic
 
     "is_definite": lambda n: maybe_is_definite(n),
 
@@ -55,7 +60,7 @@ feature_functions = {
     "g_prs_utf8": lambda n: F.g_prs_utf8.v(n),
     "pron_suffix_number": lambda n: F.prs_nu.v(n),
     "pron_suffix_gender": lambda n: F.prs_gn.v(n),
-    "pron_suffix_person": lambda n: F.prs_ps.v(n)[1],
+    "pron_suffix_person": lambda n: F.prs_ps.v(n)[1] if F.prs_ps.v(n) != "NA" else None,
     
     "has_pronominal_suffix": lambda n: "Y" if F.g_prs_utf8.v(n) != "" else None,
     "phrase_function": lambda n: F.function.v(L.u(n, otype='phrase')[0]),
@@ -67,10 +72,10 @@ feature_functions = {
     # TODO: "transliteration": <use the npm package from Chris Loder>
     # MAYBE: `rela` seems to be similar to `function` - might be worth adding
     # DON'T BOTHER: qere_trailer_utf8"
-    "phrase_node_id": lambda n: L.u(n, otype="phrase")[0],
-    "clause_node_id": lambda n: L.u(n, otype="clause")[0],
-    "sentence_node_id": lambda n: L.u(n, otype="sentence")[0],
-    "rid": lambda n: passage_to_index(T.sectionFromNode(n)), # This is the old `rid`
+    "phrase_node_id": lambda n: int(L.u(n, otype="phrase")[0]),
+    "clause_node_id": lambda n: int(L.u(n, otype="clause")[0]),
+    "sentence_node_id": lambda n: int(L.u(n, otype="sentence")[0]),
+    "rid": lambda n: int(passage_to_index(T.sectionFromNode(n))), # This is the old `rid`
 }
 def features(n):
     r = {}
