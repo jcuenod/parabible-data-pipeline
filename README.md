@@ -43,6 +43,34 @@ sh postgres/run.sh
 
 Additionally, note that data will be stored in `postgres/data`.
 
+## Current Note to Self
+
+Build the default image with
+
+```
+node main.js --reload-all
+```
+
+But now you need to dump it and import it into the docker image for the parabible server (which supports plpython etc.). So:
+
+```
+pg_dump -h 127.0.0.1 -U postgres parabibledb > dump.sql
+```
+
+Now you'll want to put that in the root for the pb data server and, after getting it running from the import, rebuild the indices.
+
+This will create the feature index (it takes a long time):
+
+```
+node create-indices.js
+```
+
+We also map tree nodes to wids for convenience (this is pretty speedy):
+
+```
+node create-warm-word-index.js
+```
+
 ## Modules
 
 At this stage nomenclature is not consistent but it will stabilise (I think to "modules"). Eventually, individual modules will be broken out into their own repos but it started here so it's here for now. This means that the root `package.json` is full of packages that are actually there for the sake of particular modules rather than the main importer.
@@ -59,6 +87,7 @@ Modules that have at least partially functioning data ready for import include:
 - [ ] NET
 - [ ] ESV (charges a licensing fee)
 - [x] JPS
-- [x] CUNP (Chinese)
+- [x] CUNPS (Chinese Simplified)
+- [x] CUNPT (Chinese Traditional)
 - [ ] RCUV (Chinese - seems like a good option)
 - [ ] Spanish?
