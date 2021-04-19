@@ -90,4 +90,4 @@ Modules that have at least partially functioning data ready for import include:
 - [x] CUNPS (Chinese Simplified)
 - [x] CUNPT (Chinese Traditional)
 - [ ] RCUV (Chinese - seems like a good option)
-- [ ] Spanish?
+- [ ] RV1960 (Seems like a good option)?
