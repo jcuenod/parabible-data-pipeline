@@ -1,0 +1,23 @@
+# Data Source
+
+| | Notes |
+| --- | --- |
+| **Content** | Robinson-Pierpont edition of the Greek New Testament in the Original Greek, Byzantine Majority Text. |
+| **Source** | <https://github.com/byztxt/byzantine-majority-text> |
+| **Format** | Seems to be a custom setup |
+| **License** | Public Domain! |
+
+## Content
+
+### Byzantine Majority Text
+
+This is Robinson's critical edition of the Byzantine majority text (NT) with parsing released to the public domain.
+
+In addition to files with parsing and strongs numbers, there is:
+
+> A "text only" version in something akin to BETA Code, accents, breathings, diarheses, iota subscripts, Byzantine variants, and a Nestle-Aland 27 collation.
+>
+> <https://github.com/byztxt/byzantine-majority-text>
+
+These sets of files appear to be in different (custom) formats and will need to be separately processed. Note, especially, the fact that "**Byzantine variants**" are noted.
+
