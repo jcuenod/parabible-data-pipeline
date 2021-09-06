@@ -4,6 +4,20 @@ const outputDb = new sqlite("./output/data.sqlite")
 const INSERT_LIMIT = 25000
 const escapeSingleQuotes = (str) => str.replace(/'/g, "''")
 
+
+const columnsToNorm = [
+	"text",
+	"realized_lexeme",
+]
+const normalizeGreekValues = obj => {
+	const r = Object.assign({},obj)
+	columnsToNorm.forEach(k => {
+		r[k] = r[k].normalize("NFC").toLowerCase()
+	})
+	return r
+}
+
+
 const fs = require("fs")
 const csvFile = "./Nestle1904/morph/Nestle1904.csv"
 const lines = fs.readFileSync(csvFile, "utf8").split("\r\n")
@@ -115,7 +129,7 @@ nestle1904.forEach(
 			rid,
 		}
 
-		words_features.push(word)
+		words_features.push(normalizeGreekValues(word))
 		verse_texts[verse_texts.length - 1][1].push({ wid, leader, text, trailer })
 	}
 )
@@ -145,8 +159,8 @@ CREATE TABLE word_features (
   trailer TEXT,
   realized_lexeme TEXT,
 ${Array.from(cols)
-	.map((k) => `  ${k} TEXT`)
-	.join(",\n")},
+		.map((k) => `  ${k} TEXT`)
+		.join(",\n")},
   rid INTEGER
 );`)
 outputDb.exec(`
@@ -161,8 +175,8 @@ console.log(" - VERSE TEXTS")
 const insert_into_verse_text = (values) => `
 INSERT INTO verse_text VALUES 
 ${values
-	.map((v) => `(${v[0]}, '${escapeSingleQuotes(JSON.stringify(v[1]))}')`)
-	.join(",")}`
+		.map((v) => `(${v[0]}, '${escapeSingleQuotes(JSON.stringify(v[1]))}')`)
+		.join(",")}`
 while (verse_texts.length > 0) {
 	const values = verse_texts.splice(0, INSERT_LIMIT)
 	const query = insert_into_verse_text(values)
@@ -174,20 +188,15 @@ while (verse_texts.length > 0) {
 console.log(" - WORD FEATURES")
 const insert_into_word_features = (words) => `
 INSERT INTO word_features VALUES
-${words
-	.map(
-		(w) =>
-			"(" +
-			columns.map((c) =>
-				w[c]
-					? Number.isInteger(w[c])
-						? w[c]
-						: `'${escapeSingleQuotes(w[c])}'`
-					: `''`
-			) +
-			")"
-	)
-	.join(",")}`
+${words.map(w => "(" +
+	columns.map((c) =>
+		w[c]
+			? Number.isInteger(w[c])
+				? w[c]
+				: `'${escapeSingleQuotes(w[c])}'`
+			: `''`
+	) + ")"
+).join(",")}`
 // Insert words
 while (words_features.length > 0) {
 	const values = words_features.splice(0, INSERT_LIMIT)
@@ -204,8 +213,9 @@ const module_data = {
 	versification_schema: "gnt",
 	license: "Public Domain",
 	url: "https://github.com/biblicalhumanities/Nestle1904/",
+	language: "el"
 }
-fs.writeFileSync("./output/version.json", JSON.stringify(module_data), "utf-8")
+fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")
 
 console.log("\nDone")
 

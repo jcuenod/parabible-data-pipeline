@@ -29,6 +29,19 @@ const escapeSingleQuotes = str =>
 
 
 
+const columnsToNorm = [
+	"text",
+	"realized_lexeme",
+]
+const normalizeGreekValues = obj => {
+	const r = Object.assign({},obj)
+	columnsToNorm.forEach(k => {
+		r[k] = r[k].normalize("NFC").toLowerCase()
+	})
+	return r
+}
+
+
 const words = []
 const verse_texts = []
 
@@ -76,7 +89,9 @@ for (const row of selectStmt.iterate()) {
 	}
 	if ("declension" in r)
 		delete r["declension"]
-	words.push(r)
+
+	words.push(normalizeGreekValues(r))
+
 	verse_text.push(word)
 	if (words.length % INSERT_LIMIT === 0) {
 		console.log("Words:", words.length)
@@ -173,6 +188,7 @@ const module_data = {
 	"abbreviation": "CCAT LXX",
 	"versification_schema": "lxx",
 	"license": "Copyright © 1988 University of Pennsylvania",
-	"url": "http://ccat.sas.upenn.edu/gopher/text/religion/biblical/"
+	"url": "http://ccat.sas.upenn.edu/gopher/text/religion/biblical/",
+	"language": "el"
 }
-fs.writeFileSync("./output/version.json", JSON.stringify(module_data), "utf-8")
+fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")
