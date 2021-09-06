@@ -91,3 +91,7 @@ Modules that have at least partially functioning data ready for import include:
 - [x] CUNPT (Chinese Traditional)
 - [ ] RCUV (Chinese - seems like a good option)
 - [ ] RV1960 (Seems like a good option)?
+
+### Module Notes
+
+- Must normalize text to NFC (that's what I'm using until it turns out that it won't work for something). I'm going to make the modules responsible for normalization.
