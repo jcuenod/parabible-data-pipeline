@@ -25,12 +25,13 @@ usfms.forEach((filename) => {
 		console.log(output, "cached")
 	}
 	catch (e) {
-		usfmToCsv({input, output})
+		usfmToCsv({ input, output })
 		console.log(output, "done")
 	}
 })
 
-
+const escapeQuotes = str => str.replace(/'/g, "''")
+const htmlLinebreaks = str => str.replace(/\s*\\n\s*/g, "<br />")
 
 const sqlite = require("better-sqlite3")
 const db = new sqlite("./output/data.sqlite")
@@ -44,7 +45,7 @@ CREATE TABLE verse_text (
 const insert_into_verse_text = values => `
 INSERT INTO verse_text VALUES 
 ${values.map(v =>
-	`(${v[0]}, '${v[1].replace(/'/g, "''")}')`
+	`(${v[0]}, '${escapeQuotes(htmlLinebreaks(v[1]))}')`
 ).join(",")}`
 
 
@@ -94,4 +95,4 @@ const module_info = {
 	"license": "Copyright ©1996-2016 by Biblical Studies Press, L.L.C. All rights reserved.",
 	"url": "https://netbible.com/"
 }
-fs.writeFileSync("./output/version.json", JSON.stringify(module_info), "utf8")
+fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")
