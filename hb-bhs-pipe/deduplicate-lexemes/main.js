@@ -1,9 +1,11 @@
 const codyData = require("./hebrew.json")
+const denylist = new Set(require("./denylist.json"))
 
 const terms = Object.values(codyData["terms_dict"])
-const dupTerms = 
+const dupTerms =
   terms
     .filter(t => /.*;.*/.test(t.term))
-    .map(t => ({term:t.term, gloss:t.gloss}))
+    .filter(t => !denylist.has(t.gloss))
+    .map(t => ({ term: t.term, gloss: t.gloss }))
 
-console.log(dupTerms)
+console.log(JSON.stringify(dupTerms, null, 2))
