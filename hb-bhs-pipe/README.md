@@ -22,13 +22,6 @@ The BHS is based on the WLC but where BHSA differs, the BHS is the base text. Th
 
 Right now, we lose "unknown"s from the ETCBC data by "null"ing them. This means that "unknown" gender, for example, ends up `null`. This is lossy and I'm not sure its implications.
 
-To import, you need to run both
-
-```
-python ./1. create_sql_from_tf.py output/data.sqlite output/word_features.json
-node ./2. create_verse_text.js
-```
-
 ### Enrichments:
 
  - Simple (Coarse) Genre Labels from Syntatic Variation Project (<https://github.com/ETCBC/genre_synvar/>)
@@ -37,3 +30,11 @@ node ./2. create_verse_text.js
  - LXX Lexeme
  - ESV Lexeme? (cf. Tyndale Amalgamated work)
  - Parsing for Ketivs (Tyndale)
+
+## To Build
+
+You will need to use a version of node compatible with `better-sqlite3` but then it's just:
+
+```
+node ./main.js
+```
