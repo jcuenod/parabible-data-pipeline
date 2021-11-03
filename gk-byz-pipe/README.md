@@ -6,6 +6,7 @@
 | **Source** | <https://github.com/byztxt/byzantine-majority-text> |
 | **Format** | Seems to be a custom setup but now (as of 06/09/2021) they have utf8 in csv files |
 | **License** | Public Domain! |
+| **Extra** | - Morphological tags<br />- Variants |
 
 ## Content
 
