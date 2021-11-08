@@ -24,13 +24,16 @@ if (!import_option || !options.includes(import_option)) {
 	console.log(help_message)
 	process.exit()
 }
-if (import_option === "--reload-all") {
-	require("./option-reload-all")
-}
-if (import_option === "--load-one") {
-	require("./option-load-one")
-}
-else {
-	console.log("Sorry, only --clear-all is currently supported.")
-	process.exit()
+
+switch (import_option) {
+	case "--reload-all":
+		require("./option-reload-all")
+		console.log("\n\nDon't forget to create indices (create-indices.js & create-warm-word-index.js)")
+		break
+	case "--load-one":
+		require("./option-load-one")
+		break
+	default:
+		console.log("Sorry, only --clear-all is currently supported.")
+		process.exit()
 }
