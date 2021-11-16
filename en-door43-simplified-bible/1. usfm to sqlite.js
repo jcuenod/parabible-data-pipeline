@@ -31,6 +31,8 @@ usfms.forEach((filename) => {
 })
 
 
+const escapeQuotes = str => str.replace(/'/g, "''")
+const htmlLinebreaks = str => str.replace(/\s*\\n\s*/g, "<br />")
 
 const sqlite = require("better-sqlite3")
 const db = new sqlite("./output/data.sqlite")
@@ -44,7 +46,7 @@ CREATE TABLE verse_text (
 const insert_into_verse_text = values => `
 INSERT INTO verse_text VALUES 
 ${values.map(v =>
-	`(${v[0]}, '${v[1].replace(/'/g, "''")}')`
+	`(${v[0]}, '${escapeQuotes(htmlLinebreaks(v[1]))}')`
 ).join(",")}`
 
 
@@ -94,4 +96,4 @@ const module_info = {
 	"license": "CC-BY-SA",
 	"url": "https://www.unfoldingword.org/ust"
 }
-fs.writeFileSync("./output/version.json", JSON.stringify(module_info), "utf8")
+fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")
