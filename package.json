@@ -18,10 +18,11 @@
   "homepage": "https://github.com/jcuenod/parabible-data-pipeline#readme",
   "dependencies": {
     "beta-code-js": "^2.0.2",
-    "better-sqlite3": "^7.1.2",
+    "better-sqlite3": "^7.4.3",
     "ccat-parse": "^0.0.2",
     "csv2array": "^0.0.4",
-    "pg": "^8.0.3",
+    "hebrew-transliteration": "^1.3.2",
+    "pg": "^8.7.1",
     "pg-native": "^3.0.0",
     "referenceparser": "^1.1.5",
     "sqlite3": "^5.0.1",
