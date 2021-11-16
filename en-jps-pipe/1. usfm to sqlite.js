@@ -93,4 +93,4 @@ const module_info = {
 	license: "Public Domain",
 	url: "https://github.com/opensiddur/opensiddur",
 }
-fs.writeFileSync("./output/version.json", JSON.stringify(module_info), "utf8")
+fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")

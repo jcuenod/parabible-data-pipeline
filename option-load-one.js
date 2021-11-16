@@ -16,7 +16,7 @@ const checks = [
     },
     {
         name: "Module data exists",
-        f: m => fs.existsSync(`./${moduleToLoad}/output/version.json`),
+        f: m => fs.existsSync(`./${moduleToLoad}/output/module.json`),
     }
 ]
 checks.reduce((a, v) => {
@@ -49,6 +49,6 @@ const schemaRowStmt = alignmentDb.prepare(`SELECT * FROM alignment LIMIT 1;`)
 const schemaRow = schemaRowStmt.get()
 const availableVersificationSchemas = new Set(Object.keys(schemaRow))
 availableVersificationSchemas.forEach(k => {
-	alignmentStmts[k] = alignmentDb.prepare(`SELECT * FROM alignment WHERE ${k} = ?`)
+    alignmentStmts[k] = alignmentDb.prepare(`SELECT * FROM alignment WHERE ${k} = ?`)
 })
 console.log("Available schemas:", availableVersificationSchemas)

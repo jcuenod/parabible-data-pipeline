@@ -88,4 +88,4 @@ const module_info = {
 	license: "Public Domain",
 	url: "https://ebible.org/details.php?id=cmn-cu89s&all=1",
 }
-fs.writeFileSync("./output/version.json", JSON.stringify(module_info), "utf8")
+fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")

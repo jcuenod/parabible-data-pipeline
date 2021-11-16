@@ -1,6 +1,5 @@
 const INSERT_LIMIT = 25000
 
-
 const fs = require("fs")
 const sqlite = require("better-sqlite3")
 const Client = require("pg-native")
@@ -9,9 +8,10 @@ const alignmentDb = sqlite("./alignment/super-align/output/data.sqlite")
 
 console.log("Checking for modules")
 const files = fs.readdirSync("./")
-const foundImports = files.filter(file =>
-	fs.existsSync(`./${file}/output/data.sqlite`) &&
-	fs.existsSync(`./${file}/output/version.json`)
+const foundImports = files.filter(
+	(file) =>
+		fs.existsSync(`./${file}/output/data.sqlite`) &&
+		fs.existsSync(`./${file}/output/module.json`)
 )
 console.log("Found:", foundImports)
 
@@ -21,22 +21,25 @@ if (fs.existsSync(`./tmp`)) {
 	fs.rmdirSync("./tmp", { recursive: true })
 }
 fs.mkdirSync("./tmp")
-foundImports.forEach(versionPath => {
-	fs.copyFileSync(`./${versionPath}/output/data.sqlite`, `./tmp/${versionPath}.sqlite`)
+foundImports.forEach((modulePath) => {
+	fs.copyFileSync(
+		`./${modulePath}/output/data.sqlite`,
+		`./tmp/${modulePath}.sqlite`
+	)
 })
-
-
 
 console.log("\nSetting up DB")
 const pg = new Client()
-const DATABASE_URL = process.env.DATABASE_URL || "postgresql://postgres:toor@127.0.0.1:5432/parabibledb"
+const DATABASE_URL =
+	process.env.DATABASE_URL ||
+	"postgresql://postgres:toor@127.0.0.1:5432/parabible"
 pg.connectSync(DATABASE_URL)
 pg.querySync(`
 	DROP TABLE IF EXISTS module_info;
 `)
 pg.querySync(`
 	CREATE TABLE module_info (
-		version_id SERIAL PRIMARY KEY,
+		module_id SERIAL PRIMARY KEY,
 		name TEXT,
 		abbreviation TEXT,
 		versification_schema TEXT,
@@ -51,69 +54,84 @@ pg.querySync(`
 	CREATE TABLE parallel (
 		parallel_id INTEGER NOT NULL,
 		versification_schema_id INTEGER NOT NULL,
-		version_id INTEGER NOT NULL,
+		module_id INTEGER NOT NULL,
 		rid INTEGER NOT NULL,
 		text TEXT
 	)
 `)
-pg.prepareSync("select_parallel_id", `
+pg.prepareSync(
+	"select_parallel_id",
+	`
 SELECT parallel_id FROM parallel
 WHERE
 	(versification_schema_id = $1 AND
 	rid = $2)
 LIMIT 1;
-`, 2)
+`,
+	2
+)
 
-
-const featuresSet = new Set(["version_id", "wid", "leader", "text", "trailer", "rid", "parallel_id"])
+const featuresSet = new Set([
+	"module_id",
+	"wid",
+	"leader",
+	"text",
+	"trailer",
+	"rid",
+	"parallel_id",
+])
 pg.querySync(`
 	DROP TABLE IF EXISTS word_features;
 `)
 pg.querySync(`
 	CREATE TABLE word_features (
-		version_id INTEGER NOT NULL,
+		word_uid SERIAL PRIMARY KEY,
+		module_id INTEGER NOT NULL,
 		wid INTEGER NOT NULL,
 		leader TEXT,
 		text TEXT,
 		trailer TEXT,
 		rid INTEGER NOT NULL,
-		parallel_id INTEGER NOT NULL,
-        PRIMARY KEY (version_id, wid)
+		parallel_id INTEGER NOT NULL
 	)
 `)
 
-const addFeatures = features =>
-	features.forEach(f => {
+const addFeatures = (features) =>
+	features.forEach((f) => {
 		if (!featuresSet.has(f)) {
 			pg.querySync(`
 			ALTER TABLE word_features
-			ADD COLUMN ${f} TEXT
+			ADD COLUMN ${f} ${f.endsWith("_node_id") ? "INTEGER" : "TEXT"}
 			`)
 			featuresSet.add(f)
 		}
 	})
 
-
-console.log("\nGetting schemas")
+console.log("\nGetting versification schemas")
 // Get available versification schemas
 const alignmentStmts = {}
 const schemaRowStmt = alignmentDb.prepare(`SELECT * FROM alignment LIMIT 1;`)
 const schemaRow = schemaRowStmt.get()
 const availableVersificationSchemas = new Set(Object.keys(schemaRow))
-availableVersificationSchemas.forEach(k => {
-	alignmentStmts[k] = alignmentDb.prepare(`SELECT * FROM alignment WHERE ${k} = ?`)
+availableVersificationSchemas.forEach((k) => {
+	alignmentStmts[k] = alignmentDb.prepare(
+		`SELECT * FROM alignment WHERE ${k} = ?`
+	)
 })
 console.log("Available schemas:", availableVersificationSchemas)
 
 const schemaIds = Array.from(availableVersificationSchemas)
-const getVersificationId = schemaString => schemaIds.indexOf(schemaString) + 1
+const getVersificationId = (schemaString) => schemaIds.indexOf(schemaString) + 1
 
-const getParallelRid = ({ rid, versificationSchema, versificationSchemaId }) => {
+const getParallelRid = ({
+	rid,
+	versificationSchema,
+	versificationSchemaId,
+}) => {
 	const row = alignmentStmts[versificationSchema].get(rid)
 
 	for (key in row) {
-		if (!row[key] || !availableVersificationSchemas.has(key))
-			continue
+		if (!row[key] || !availableVersificationSchemas.has(key)) continue
 
 		const pid = pg.executeSync("select_parallel_id", [
 			getVersificationId(key),
@@ -128,39 +146,46 @@ const getParallelRid = ({ rid, versificationSchema, versificationSchemaId }) => 
 }
 
 console.log("\nInserting Modules")
-const versionJsonFields = [
-	"name", "abbreviation", "versification_schema", "license", "url"
+const moduleJsonFields = [
+	"name",
+	"abbreviation",
+	"versification_schema",
+	"license",
+	"url",
 ]
 const getModuleInfo = () => pg.querySync(`SELECT * FROM module_info;`)
 
 let parallelId = 0
 let rowImportCounter = 0
-// Process each version...
-foundImports.forEach((versionPath, importIteration) => {
+// Process each module...
+foundImports.forEach((modulePath, importIteration) => {
 	// Load module information and store in pg
-	const versionJson = fs.readFileSync(`./${versionPath}/output/version.json`)
-	const version = JSON.parse(versionJson)
+	const moduleJson = fs.readFileSync(`./${modulePath}/output/module.json`)
+	const module = JSON.parse(moduleJson)
 	pg.querySync(`
 		INSERT INTO module_info
 			(name, abbreviation, versification_schema, license, url)
 		VALUES (
-			${versionJsonFields.map(k => pg.escapeLiteral(version[k])).join(",")}
+			${moduleJsonFields.map((k) => pg.escapeLiteral(module[k])).join(",")}
 		)
 	`)
 	{
 		const moduleInfo = getModuleInfo()
-		const thisModule = moduleInfo.find(m => m.name === version.name)
-		version.versionId = thisModule.version_id
-		version.versificationId = getVersificationId(version.versification_schema)
+		const thisModule = moduleInfo.find((m) => m.name === module.name)
+		module.moduleId = thisModule.module_id
+		module.versificationId = getVersificationId(module.versification_schema)
 	}
-	if (!availableVersificationSchemas.has(version.versification_schema)) {
-		console.log("No matching versification schema available:", version.versification_schema)
+	if (!availableVersificationSchemas.has(module.versification_schema)) {
+		console.log(
+			"No matching versification schema available:",
+			module.versification_schema
+		)
 	}
-	console.log("\n\n", version)
+	console.log("\n\n", module)
 
 	// Connect to source sqlite db
 	console.log("-- query sqlite and doing inserts to pg --")
-	const db = sqlite(`./tmp/${versionPath}.sqlite`)
+	const db = sqlite(`./tmp/${modulePath}.sqlite`)
 
 	// This variable helps us stitch together word_features and the parallel verse_texts
 	const ridToParallelId = {}
@@ -174,14 +199,13 @@ foundImports.forEach((versionPath, importIteration) => {
 			let parallel_id = 0
 			if (importIteration === 0) {
 				parallel_id = ++parallelId
-			}
-			else {
+			} else {
 				// Get by querying alignment
 				// alignmentDb.prepare....
 				parallel_id = +getParallelRid({
 					rid: row.rid,
-					versificationSchemaId: version.versificationId,
-					versificationSchema: version.versification_schema,
+					versificationSchemaId: module.versificationId,
+					versificationSchema: module.versification_schema,
 				})
 				if (parallel_id === -1) {
 					parallel_id = ++parallelId
@@ -189,8 +213,8 @@ foundImports.forEach((versionPath, importIteration) => {
 			}
 			rows.push([
 				parallel_id,
-				version.versificationId,
-				version.versionId,
+				module.versificationId,
+				module.moduleId,
 				row.rid,
 				row.text,
 			])
@@ -202,11 +226,11 @@ foundImports.forEach((versionPath, importIteration) => {
 		console.log("--- - rows built:", rows.length)
 		console.log("--- - inserting row list")
 		console.log("--- - remaining:", rows.length)
-		const build_query = values => `
+		const build_query = (values) => `
 		INSERT INTO parallel VALUES
-		${values.map(cols =>
-			`(${cols.map(v => pg.escapeLiteral(v)).join(",")})`
-		).join(",")};`
+		${values
+				.map((cols) => `(${cols.map((v) => pg.escapeLiteral(v)).join(",")})`)
+				.join(",")};`
 		while (rows.length > 0) {
 			const values = rows.splice(0, INSERT_LIMIT)
 			const query = build_query(values)
@@ -221,9 +245,8 @@ foundImports.forEach((versionPath, importIteration) => {
 		let wfStmt
 		try {
 			wfStmt = db.prepare("SELECT * FROM word_features;")
-		}
-		catch (e) {
-			console.log("--- Couldn't SELECT from word_features on " + version.name)
+		} catch (e) {
+			console.log("--- Couldn't SELECT from word_features on " + module.name)
 			console.log("--- (probably does not exist, skipping)")
 			return
 		}
@@ -234,14 +257,14 @@ foundImports.forEach((versionPath, importIteration) => {
 			if (!addedMissingFeatures) {
 				cols = Object.keys(row)
 				cols.push("parallel_id")
-				cols.push("version_id")
+				cols.push("module_id")
 				addFeatures(cols)
 				addedMissingFeatures = true
 			}
 			row.parallel_id = ridToParallelId[row.rid]
-			row.version_id = version.versionId
+			row.module_id = module.moduleId
 			row.rid = +row.rid
-			rows.push(cols.map(k => row[k]))
+			rows.push(cols.map((k) => row[k]))
 			if (rows.length % 10000 === 0) {
 				console.log("--- -- rows:", rows.length)
 			}
@@ -250,11 +273,14 @@ foundImports.forEach((versionPath, importIteration) => {
 
 		console.log("--- - inserting row list")
 		console.log("--- - remaining:", rows.length)
-		const build_query = values => `
+		const build_query = (values) => `
 		INSERT INTO word_features(${cols.join(",")})
-		VALUES ${values.map(cols =>
-			`(${cols.map(v => pg.escapeLiteral(v) || "NULL").join(",")})`
-		).join(",")};`
+		VALUES ${values
+				.map(
+					(cols) =>
+						`(${cols.map((v) => pg.escapeLiteral(v) || "NULL").join(",")})`
+				)
+				.join(",")};`
 		while (rows.length > 0) {
 			const values = rows.splice(0, INSERT_LIMIT)
 			const query = build_query(values)
@@ -264,6 +290,6 @@ foundImports.forEach((versionPath, importIteration) => {
 	}
 })
 
-// pg.querySync(`CREATE INDEX ON word_features (version_id, wid)`)
-pg.querySync(`CREATE INDEX ON parallel (version_id, rid)`)
-pg.querySync(`CREATE INDEX ON parallel (parallel_id, version_id)`)
+pg.querySync(`CREATE INDEX ON word_features (module_id, wid)`)
+pg.querySync(`CREATE INDEX ON parallel (module_id, rid)`)
+pg.querySync(`CREATE INDEX ON parallel (parallel_id, module_id)`)
