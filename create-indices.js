@@ -11,13 +11,13 @@ const DATABASE_URL =
 	"postgresql://postgres:toor@127.0.0.1:5432/parabible"
 pg.connectSync(DATABASE_URL)
 
-// pg.querySync(`CREATE INDEX ON word_features (version_id, wid)`)
-// pg.querySync(`CREATE INDEX ON parallel (version_id, rid)`)
-// pg.querySync(`CREATE INDEX ON parallel (parallel_id, version_id)`)
+// pg.querySync(`CREATE INDEX ON word_features (module_id, wid)`)
+// pg.querySync(`CREATE INDEX ON parallel (module_id, rid)`)
+// pg.querySync(`CREATE INDEX ON parallel (parallel_id, module_id)`)
 
 const featureFilter = (f) =>
 	f !== "word_uid" &&
-	f !== "version_id" &&
+	f !== "module_id" &&
 	f !== "wid" &&
 	f !== "leader" &&
 	f !== "prefix" &&

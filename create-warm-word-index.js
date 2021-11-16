@@ -10,22 +10,23 @@ pg.connectSync(DATABASE_URL)
 
 const featureRow = pg.querySync(`SELECT * FROM word_features LIMIT 1`)[0]
 const syntaxSet = new Set(Object.keys(featureRow).filter(f => f.endsWith("_node_id")))
+syntaxSet.add("rid")
 
 pg.querySync(`
 DROP TABLE IF EXISTS warm_word_index;
 CREATE TABLE warm_word_index (
-    version_id INTEGER NOT NULL,
+    module_id INTEGER NOT NULL,
     tree_node_type TEXT NOT NULL,
     tree_node INTEGER NOT NULL,
     wids INTEGER[] NOT NULL,
-    PRIMARY KEY(version_id, tree_node_type, tree_node)
+    PRIMARY KEY(module_id, tree_node_type, tree_node)
 );`)
 
 syntaxSet.forEach(treeNodeType => {
     pg.querySync(`
     INSERT INTO warm_word_index
         SELECT
-            version_id,
+            module_id,
             '${treeNodeType}' AS tree_node_type,
             ${treeNodeType} AS tree_node,
             array_agg(wid) AS wids
@@ -34,6 +35,6 @@ syntaxSet.forEach(treeNodeType => {
         WHERE
             ${treeNodeType} IS NOT NULL
         GROUP BY
-            version_id,
+            module_id,
             ${treeNodeType};`)
 })
