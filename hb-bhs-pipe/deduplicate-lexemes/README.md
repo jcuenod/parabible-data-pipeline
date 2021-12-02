@@ -6,6 +6,8 @@ Cody Kingham made an effort to find duplicated lexemes by hand for the sake of h
 
 Some of the so called duplicates were not that helpful so I exclude them based on `denylist.json`.
 
+I have also discovered other duplicates that weren't listed and added them to `jamesDuplicates.json`. These are imported add appended to the output but no checks are made to deduplicate the duplicates. Hopefully that won't matter...
+
 Invoking `main.js` should extract all the instances of duplicated terms with associated glosses (for reference).
 
 
