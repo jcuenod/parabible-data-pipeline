@@ -35,7 +35,7 @@ module.exports = db => {
             .splice(0, INSERT_LIMIT)
             .map(({ id, lexeme }) => ({
                 wid: id,
-                transliteration: transliterate(lexeme, { isSimple: true })
+                transliteration: transliterate(lexeme)
             }))
         const addTransliterationSql = generateBulkInsertSql(values)
         db.prepare(addTransliterationSql).run()

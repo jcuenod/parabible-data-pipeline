@@ -44,6 +44,8 @@ def maybe_is_definite(n):
 def convert_part_of_speech (part):
     if part == "subs":
         return "noun"
+    elif part == "adjv":
+        return "adj"
     return part
 
 def convert_gender (gn):
@@ -61,13 +63,14 @@ feature_functions = {
     "text": lambda n: normify(F.g_word_utf8.v(n)),
     "trailer": lambda n: normify(F.trailer_utf8.v(n)),
     "qere": lambda n: normify(F.qere_utf8.v(n)),
-    #REMOVE: "consonantal_root": lambda n: F.lex_utf8.v(n).replace('=', '').replace('/','').replace('[',''),
+    "consonantal_root": lambda n: normify(F.lex_utf8.v(n)),
+    # .replace('=', '').replace('/','').replace('[',''),
     "lexeme": lambda n: normify(F.voc_lex_utf8.v(L.u(n, otype='lex')[0])),
     "realized_lexeme": lambda n: normify(F.g_lex_utf8.v(n)),
     "gloss": lambda n: F.gloss.v(L.u(n, otype='lex')[0]),
 
-    "part_of_speech": convert_part_of_speech(lambda n: F.sp.v(n)),
-    "person": lambda n: F.ps.v(n)[1] if F.ps.v(n) != "NA" else None,
+    "part_of_speech": lambda n: convert_part_of_speech(F.sp.v(n)),
+    "person": lambda n: F.ps.v(n)[1] if F.ps.v(n) in ["p1", "p2", "p3"] else None,
     "number": lambda n: F.nu.v(n),
     "gender": lambda n: convert_gender(F.gn.v(n)),
     "tense": lambda n: F.vt.v(n), # vt = verbal tense
@@ -83,7 +86,7 @@ feature_functions = {
     "g_prs_utf8": lambda n: normify(F.g_prs_utf8.v(n)),
     "pron_suffix_number": lambda n: F.prs_nu.v(n),
     "pron_suffix_gender": lambda n: F.prs_gn.v(n),
-    "pron_suffix_person": lambda n: F.prs_ps.v(n)[1] if F.prs_ps.v(n) != "NA" else None,
+    "pron_suffix_person": lambda n: F.prs_ps.v(n)[1] if F.prs_ps.v(n) in ["p1", "p2", "p3"] else None,
     
     "has_pronominal_suffix": lambda n: "Y" if F.g_prs_utf8.v(n) != "" else None,
     "phrase_function": lambda n: F.function.v(L.u(n, otype='phrase')[0]),
