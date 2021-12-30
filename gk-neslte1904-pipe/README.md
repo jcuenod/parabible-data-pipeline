@@ -20,3 +20,4 @@ A version of the GNT used because it is old enough to be in the public domain. H
 
  - **Syntax Trees**: Part of the repo in xml format but not yet usable in parabible-like searches because they have too much nesting)
  - **Glosses**: Also in the repo (I haven't looked at how to include them). Note also, dictionaries by Dodson and Mounce can probably be mapped to Nestle1904 using strongs numbers.
+ - **ALSO:** (sentence, clause!) https://github.com/CenterBLC/NA
