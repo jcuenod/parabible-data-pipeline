@@ -7,7 +7,7 @@ const escapeSingleQuotes = (str) => str.replace(/'/g, "''")
 
 const columnsToNorm = [
 	"text",
-	"realized_lexeme",
+	"lexeme",
 ]
 const normalizeGreekValues = obj => {
 	const r = Object.assign({},obj)
@@ -124,7 +124,7 @@ nestle1904.forEach(
 			leader,
 			text,
 			trailer,
-			realized_lexeme: lemma,
+			lexeme: lemma,
 			...parsing,
 			rid,
 		}
@@ -145,7 +145,7 @@ const columns = [
 	"leader",
 	"text",
 	"trailer",
-	"realized_lexeme",
+	"lexeme",
 	...cols,
 	"rid",
 ]
@@ -157,7 +157,7 @@ CREATE TABLE word_features (
   leader TEXT,
   text TEXT,
   trailer TEXT,
-  realized_lexeme TEXT,
+  lexeme TEXT,
 ${Array.from(cols)
 		.map((k) => `  ${k} TEXT`)
 		.join(",\n")},
