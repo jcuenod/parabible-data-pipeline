@@ -109,16 +109,15 @@ const addFeatures = (features) =>
 
 console.log("\nGetting versification schemas")
 // Get available versification schemas
-const alignmentStmts = {}
 const schemaRowStmt = alignmentDb.prepare(`SELECT * FROM alignment LIMIT 1;`)
 const schemaRow = schemaRowStmt.get()
 const availableVersificationSchemas = new Set(Object.keys(schemaRow))
-availableVersificationSchemas.forEach((k) => {
-	alignmentStmts[k] = alignmentDb.prepare(
-		`SELECT * FROM alignment WHERE ${k} = ?`
-	)
-})
 console.log("Available schemas:", availableVersificationSchemas)
+const alignmentStmts = Object.fromEntries(
+	Array.from(availableVersificationSchemas).map(schema =>
+		[schema, alignmentDb.prepare(`SELECT * FROM alignment WHERE ${schema} = ?`)]
+	)
+)
 
 const schemaIds = Array.from(availableVersificationSchemas)
 const getVersificationId = (schemaString) => schemaIds.indexOf(schemaString) + 1
@@ -135,7 +134,7 @@ const getParallelRid = ({
 
 		const pid = pg.executeSync("select_parallel_id", [
 			getVersificationId(key),
-			rid,
+			row[key],
 		])
 
 		if (pid[0] && "parallel_id" in pid[0]) {
