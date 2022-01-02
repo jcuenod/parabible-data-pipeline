@@ -192,9 +192,9 @@ foundImports.forEach((modulePath, importIteration) => {
 	console.log("--- parallel text")
 	{
 		console.log("--- - building row list")
-		const vtStmt = db.prepare("SELECT * FROM verse_text ORDER BY rid;")
+		const vtStmt = db.prepare("SELECT * FROM verse_text ORDER BY rid;").all()
 		const rows = []
-		for (const row of vtStmt.iterate()) {
+		vtStmt.forEach(row => {
 			let parallel_id = 0
 			if (importIteration === 0) {
 				parallel_id = ++parallelId
@@ -221,7 +221,7 @@ foundImports.forEach((modulePath, importIteration) => {
 			if (rows.length % 2000 === 0) {
 				console.log("--- -- rows count:", rows.length)
 			}
-		}
+		})
 		console.log("--- - rows built:", rows.length)
 		console.log("--- - inserting row list")
 		console.log("--- - remaining:", rows.length)
@@ -243,7 +243,7 @@ foundImports.forEach((modulePath, importIteration) => {
 		let cols = []
 		let wfStmt
 		try {
-			wfStmt = db.prepare("SELECT * FROM word_features;")
+			wfStmt = db.prepare("SELECT * FROM word_features;").all()
 		} catch (e) {
 			console.log("--- Couldn't SELECT from word_features on " + module.name)
 			console.log("--- (probably does not exist, skipping)")
@@ -252,7 +252,7 @@ foundImports.forEach((modulePath, importIteration) => {
 		console.log("--- - building row list")
 		let addedMissingFeatures = false
 		const rows = []
-		for (const row of wfStmt.iterate()) {
+		wfStmt.forEach(row => {
 			if (!addedMissingFeatures) {
 				cols = Object.keys(row)
 				cols.push("parallel_id")
@@ -267,7 +267,7 @@ foundImports.forEach((modulePath, importIteration) => {
 			if (rows.length % 10000 === 0) {
 				console.log("--- -- rows:", rows.length)
 			}
-		}
+		})
 		console.log("--- -- rows:", rows.length)
 
 		console.log("--- - inserting row list")
