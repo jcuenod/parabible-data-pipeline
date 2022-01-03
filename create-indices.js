@@ -1,6 +1,3 @@
-// CURRENTLY TAKES 1 HOUR
-// Timing: node create-indices.js  10.41s user 2.08s system 0% cpu 56:36.92 total
-
 const Client = require("pg-native")
 const pg = new Client()
 
@@ -61,39 +58,6 @@ featureSet.forEach((feature) => {
 			${feature}`
 	console.log(insertQuery)
 	const values = pg.querySync(insertQuery)
-	// const insertions = []
-	// const values = pg.querySync(`SELECT DISTINCT ${feature} as value FROM word_features;`)
-	// console.log(feature)
-	// console.log("VALUES:", values)
-	// while (values.length) {
-	// 	const { value } = values.pop()
-	// 	if (!value) continue
-	// 	const wordUidResult = pg.querySync(
-	// 		`SELECT word_uid FROM word_features WHERE ${feature} = ${pg.escapeLiteral(
-	// 			value
-	// 		)}`
-	// 	)
-	// 	const wordUids = wordUidResult.map((w) => w["word_uid"])
-	// 	insertions.push({ feature, value, wordUids })
-	// 	if (values.length % 100 === 0) {
-	// 		console.log(feature, value)
-	// 		console.log("- remaining:", values.length)
-	// 	}
-	// }
-	// console.log(insertions)
-	// while (insertions.length) {
-	// 	const values = insertions.splice(0, INSERTION_LIMIT)
-	// 	const query = `
-	// INSERT INTO
-	// feature_index (feature, value, word_uids)
-	// VALUES
-	// ${values.map(({ feature, value, wordUids }) =>
-	// 		`(${pg.escapeLiteral(feature)}, ${pg.escapeLiteral(
-	// 			value
-	// 		)}, '{${wordUids.join(",")}}')`
-	// 	)}`
-	// 	pg.querySync(query)
-	// }
 })
 
 console.log("Creating index on feature_values")

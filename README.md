@@ -50,25 +50,20 @@ Build the default image with
 ```
 node main.js --reload-all
 ```
-
-But now you need to dump it and import it into the docker image for the parabible server (which supports plpython etc.). So:
-
-```
-pg_dump -h 127.0.0.1 -U postgres parabibledb > dump.sql
-```
-
-Now you'll want to put that in the root for the pb data server and, after getting it running from the import, rebuild the indices.
-
-This will create the feature index (it takes a long time):
+You must also create the helper index tables for term queries. Respectively, they index word_uids by word feature, wids by module and tree_node (phrase, clause, sentence, verse), parallel_id by tree_node. All three are **essential** for the parabible server.
 
 ```
 node create-indices.js
-```
-
-We also map tree nodes to wids for convenience (this is pretty speedy):
-
-```
 node create-warm-word-index.js
+node create-tree-node-mapping-index.js
+```
+
+## Backup
+
+Just use the postgres dump function `pg_dump` with the same connection parameters as you would use to connect using `psql`:
+
+```
+pg_dump -h 127.0.0.1 -U postgres parabibledb > dump.sql
 ```
 
 ## Modules
