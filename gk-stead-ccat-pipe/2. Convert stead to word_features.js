@@ -31,7 +31,7 @@ const escapeSingleQuotes = str =>
 
 const columnsToNorm = [
 	"text",
-	"realized_lexeme",
+	"lexeme",
 ]
 const normalizeGreekValues = obj => {
 	const r = Object.assign({},obj)
@@ -78,7 +78,7 @@ for (const row of selectStmt.iterate()) {
 	const r = {
 		wid,
 		...word,
-		realized_lexeme: betaCodeToGreek(row["GrkLemma"]),
+		lexeme: betaCodeToGreek(row["GrkLemma"]),
 		...ccatParse(morph),
 		// syntax_node?
 		rid,
@@ -110,7 +110,7 @@ words.forEach(w => {
 columnSet.delete("wid")
 columnSet.delete("text")
 columnSet.delete("trailer")
-columnSet.delete("realized_lexeme")
+columnSet.delete("lexeme")
 columnSet.delete("rid")
 const columnSetToArray = Array.from(columnSet)
 
@@ -118,7 +118,7 @@ const columns = [
 	"wid",
 	"text",
 	"trailer",
-	"realized_lexeme",
+	"lexeme",
 	...columnSetToArray,
 	"rid"
 ]
@@ -131,7 +131,7 @@ CREATE TABLE word_features (
   wid INTEGER,
   text TEXT,
   trailer TEXT,
-  realized_lexeme TEXT,
+  lexeme TEXT,
 ${columnSetToArray.map(k => `  ${k} TEXT`).join(",\n")},
   rid INTEGER
 );`)
