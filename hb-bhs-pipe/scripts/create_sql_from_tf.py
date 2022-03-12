@@ -117,7 +117,7 @@ def features(n):
 # for k in TF.features.keys(): print(k)
 
 def sql_type(key):
-    return "INTEGER" if key.endswith("_node_id") else "TEXT"
+    return "INTEGER" if key.endswith("_node_id") or key == "rid" else "TEXT"
 
 print("Preparing sql file")
 drop_table_sql = """
