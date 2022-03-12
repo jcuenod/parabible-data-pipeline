@@ -1,5 +1,65 @@
 const INSERT_LIMIT = 25000
 
+
+/*
+ * features.json
+ * {
+ * 	featureNames: [
+ * 	 { key: part_of_speech, value: "Part of Speech" },
+ * 	 ...
+ * 	],
+ * 	featureValues: [
+ * 	 { feature: part_of_speech, key: noun, value: "Noun" }
+ * 	]
+ * }
+ */
+
+const excludedFeatures = new Set(["word_uid", "module_id", "wid", "leader", "text", "trailer", "rid", "parallel_id", "phrase_node_id", "clause_node_id", "sentence_node_id"])
+const fd = require("./features.json")
+const knownFeatures = new Set(fd.features.map(f => f.key))
+const isFeatureKnown = (feature) => knownFeatures.has(feature)
+const isFeatureEnum = (feature) => fd.features.find(f => f.key === feature).enum
+const isValueKnown = (feature, value) => {
+	if (!isFeatureKnown(feature)) return false
+
+	// We only need to validate values if it's an enum
+	return isFeatureEnum(feature)
+		? fd.values.find(v => v.feature === feature && v.key === value)
+		: true
+}
+
+const validateFeatures = db => {
+	const tables = db.prepare(`SELECT name FROM sqlite_schema 
+			WHERE type IN ('table','view') 
+			AND name NOT LIKE 'sqlite_%'
+			ORDER BY 1
+	`).all().map(t => t.name)
+	console.log(tables)
+	if (!tables.includes("word_features")) {
+		console.log(" - Couldn't find word_features table, probably no features in the database. So nevermind validating features...")
+		return
+	}
+	const features = db.prepare(`select name from pragma_table_info('word_features');`).all().map(f => f.name)
+	console.log(features)
+	features.forEach(feature => {
+		if (excludedFeatures.has(feature))
+			return
+		if (!isFeatureKnown(feature))
+			throw (`Unknown feature: ${feature}`)
+
+		if (isFeatureEnum(feature)) {
+			const actualValues = db.prepare(`select distinct ${feature} as f from word_features where ${feature} != ''`).all().map(row => row.f)
+			console.log(feature, actualValues)
+			const unknownValues = actualValues.filter(value => !isValueKnown(feature, value))
+			if (unknownValues.length > 0) {
+				console.error(`Expected defined set of values but found unknown values:\n${JSON.stringify(unknownValues)}`)
+				throw ("Expected defined set of values but found unknown values")
+			}
+		}
+	})
+	console.log(" - Features are valid!")
+}
+
 const fs = require("fs")
 const sqlite = require("better-sqlite3")
 const Client = require("pg-native")
@@ -26,6 +86,9 @@ foundImports.forEach((modulePath) => {
 		`./${modulePath}/output/data.sqlite`,
 		`./tmp/${modulePath}.sqlite`
 	)
+	// Check that the word features in each import with word data are known by the importer (the single source of truth on what word features mean)
+	console.log(`Validating word_features in ${modulePath}`)
+	validateFeatures(sqlite(`./tmp/${modulePath}.sqlite`))
 })
 
 console.log("\nSetting up DB")
@@ -43,6 +106,7 @@ pg.querySync(`
 		name TEXT,
 		abbreviation TEXT,
 		versification_schema TEXT,
+		versification_schema_id INTEGER NOT NULL,
 		license TEXT,
 		url TEXT
 	)
@@ -149,6 +213,7 @@ const moduleJsonFields = [
 	"name",
 	"abbreviation",
 	"versification_schema",
+	"versificationId",
 	"license",
 	"url",
 ]
@@ -161,18 +226,18 @@ foundImports.forEach((modulePath, importIteration) => {
 	// Load module information and store in pg
 	const moduleJson = fs.readFileSync(`./${modulePath}/output/module.json`)
 	const module = JSON.parse(moduleJson)
+	module.versificationId = getVersificationId(module.versification_schema)
 	pg.querySync(`
 		INSERT INTO module_info
-			(name, abbreviation, versification_schema, license, url)
+			(name, abbreviation, versification_schema, versification_schema_id, license, url)
 		VALUES (
-			${moduleJsonFields.map((k) => pg.escapeLiteral(module[k])).join(",")}
+			${moduleJsonFields.map(k => pg.escapeLiteral(module[k])).join(",")}
 		)
 	`)
 	{
 		const moduleInfo = getModuleInfo()
 		const thisModule = moduleInfo.find((m) => m.name === module.name)
 		module.moduleId = thisModule.module_id
-		module.versificationId = getVersificationId(module.versification_schema)
 	}
 	if (!availableVersificationSchemas.has(module.versification_schema)) {
 		console.log(
