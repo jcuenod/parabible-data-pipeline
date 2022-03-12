@@ -90,7 +90,7 @@ feature_functions = {
     
     "g_prs_utf8": lambda n: normify(F.g_prs_utf8.v(n)),
     "pron_suffix_number": lambda n: F.prs_nu.v(n),
-    "pron_suffix_gender": lambda n: F.prs_gn.v(n),
+    "pron_suffix_gender": lambda n: convert_gender(F.prs_gn.v(n)),
     "pron_suffix_person": lambda n: F.prs_ps.v(n)[1] if F.prs_ps.v(n) in ["p1", "p2", "p3"] else None,
     
     "has_pronominal_suffix": lambda n: "Y" if F.g_prs_utf8.v(n) != "" else None,
