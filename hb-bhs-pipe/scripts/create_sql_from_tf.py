@@ -59,7 +59,7 @@ def convert_gender (gn):
         return gn
 
 def convert_na_to_none (value):
-    if value == "NA":
+    if value == "na":
         return None
     return value
 
@@ -79,9 +79,9 @@ feature_functions = {
     "number": lambda n: F.nu.v(n),
     "gender": lambda n: convert_gender(F.gn.v(n)),
     "tense": lambda n: F.vt.v(n), # vt = verbal tense
-    "stem": lambda n: convert_na_to_none(F.vs.v(n)), # vs = verbal stem
+    "stem": lambda n: convert_na_to_none(F.vs.v(n).lower()), # vs = verbal stem
 
-    "state": lambda n: F.st.v(n).lower(), # construct/absolute/emphatic
+    "state": lambda n: convert_na_to_none(F.st.v(n).lower()), # construct/absolute/emphatic
 
     "is_definite": lambda n: maybe_is_definite(n),
 
