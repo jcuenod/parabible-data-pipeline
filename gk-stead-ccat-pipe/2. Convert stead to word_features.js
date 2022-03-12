@@ -34,7 +34,7 @@ const columnsToNorm = [
 	"lexeme",
 ]
 const normalizeGreekValues = obj => {
-	const r = Object.assign({},obj)
+	const r = Object.assign({}, obj)
 	columnsToNorm.forEach(k => {
 		r[k] = r[k].normalize("NFC").toLowerCase()
 	})
@@ -89,6 +89,14 @@ for (const row of selectStmt.iterate()) {
 	}
 	if ("declension" in r)
 		delete r["declension"]
+	if ("mood" in r) {
+		if (r["mood"] === "ptcp") {
+			r["mood"] = "ptc"
+		}
+		if (r["mood"] === "infn") {
+			r["mood"] = "inf"
+		}
+	}
 
 	words.push(normalizeGreekValues(r))
 
