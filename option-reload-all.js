@@ -354,6 +354,41 @@ foundImports.forEach((modulePath, importIteration) => {
 	}
 })
 
+console.log("Creating standard indices")
 pg.querySync(`CREATE INDEX ON word_features (module_id, wid)`)
 pg.querySync(`CREATE INDEX ON parallel (module_id, rid)`)
 pg.querySync(`CREATE INDEX ON parallel (parallel_id, module_id)`)
+
+const readline = require('readline')
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout
+})
+const promptToRebuild = async () => {
+	rl.question('Rebuild custom indices (y/N)? ', (answer) => {
+		if (["y", "N"].includes(answer)) {
+			if (answer === "y") {
+				require("./create-indices.js")
+				require("./create-treenode-mapping-index.js")
+				require("./create-warm-word-index.js")
+				require("./create-ordering-index.js")
+				console.log("Done!")
+				rl.close()
+			}
+			else {
+				console.log(`Okay, don't forget to rebuild!
+					node ./create-indices.js
+					node ./create-treenode-mapping-index.js
+					node ./create-warm-word-index.js
+					node ./create-ordering-index.js
+				`.replace(/\t\t\t\t\t/g, " - "))
+				rl.close()
+			}
+		}
+		else {
+			console.log(`Please type either "y" or "N"`)
+			promptToRebuild()
+		}
+	})
+}
+promptToRebuild()
