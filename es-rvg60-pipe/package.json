@@ -1,0 +1,12 @@
+{
+  "name": "es-rvg60-pipe",
+  "version": "1.0.0",
+  "description": "Parabible module importer for RVG60",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "author": "James Cuénod",
+  "license": "ISC"
+}
