@@ -6,7 +6,7 @@ const unduplicateNewLines = (text) => {
 	return returnText === text ? text : unduplicateNewLines(returnText)
 }
 const escapeCsvNewLines = (text) =>
-	unduplicateNewLines(text).replace(/\n/g, "\\n")
+	unduplicateNewLines(text).replace(/\n/g, "<br />")
 const escapeCsvQuote = (text) => text.replace(/"/g, '""')
 const rowToCsv = ({ book, chapter, verse, text }) =>
 	`"${book}",${chapter},${verse},"${escapeCsvNewLines(escapeCsvQuote(text))}"`
