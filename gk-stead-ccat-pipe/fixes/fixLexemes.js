@@ -4,6 +4,7 @@ const db = new sqlite("./output/data.sqlite")
 
 const lexemeUpdates = [
 	{ from :"ἅλς", to: "ἅλας" },
+	{ from: "σώζω", to: "σῴζω" }
 ]
 
 lexemeUpdates.forEach(l => {
