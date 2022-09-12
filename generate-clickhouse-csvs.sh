@@ -6,7 +6,7 @@ for t in "${tables[@]}"
 do
 	echo "$t"
 	psql $db \
-		-c "COPY $t TO STDOUT WITH DELIMITER ',' CSV HEADER;" \
+		-c "COPY $t TO STDOUT WITH DELIMITER ',' CSV HEADER FORCE QUOTE *;" \
 		| gzip \
 		> "./clickhouse-csvs/$t.csv.gz"
 done
