@@ -1,5 +1,37 @@
 const INSERT_LIMIT = 25000
 
+const showProgress = () => {
+	var ProgressBar = require('progress')
+	var https = require('https')
+
+	var req = https.request({
+		host: 'download.github.com',
+		port: 443,
+		path: '/visionmedia-node-jscoverage-0d4608a.zip'
+	})
+
+	req.on('response', function (res) {
+		var len = parseInt(res.headers['content-length'], 10)
+
+		console.log()
+		var bar = new ProgressBar('  downloading [:bar] :rate/bps :percent :etas', {
+			complete: '=',
+			incomplete: ' ',
+			width: 20,
+			total: len
+		})
+
+		res.on('data', function (chunk) {
+			bar.tick(chunk.length)
+		})
+
+		res.on('end', function () {
+			console.log('\n')
+		})
+	})
+
+	req.end()
+}
 
 /*
  * features.json
@@ -73,6 +105,10 @@ const foundImports = files.filter(
 		fs.existsSync(`./${file}/output/data.sqlite`) &&
 		fs.existsSync(`./${file}/output/module.json`)
 )
+// //only the ones I want to test
+// .filter(f => ['en-net-pipe',
+// 	'gk-stead-ccat-pipe',
+// 	'hb-bhs-pipe'].includes(f))
 console.log("Found:", foundImports)
 
 console.log("Making `/tmp` duplicates")
@@ -192,6 +228,13 @@ const getParallelRid = ({
 	versificationSchemaId,
 }) => {
 	const row = alignmentStmts[versificationSchema].get(rid)
+	// if (rid == 1031055) {
+	// 	console.log(rid)
+	// 	console.log(versificationSchema)
+	// 	console.log(versificationSchemaId)
+	// 	console.log(row)
+	// 	console.log("here we go...")
+	// }
 
 	for (key in row) {
 		if (!row[key] || !availableVersificationSchemas.has(key)) continue
@@ -271,6 +314,10 @@ foundImports.forEach((modulePath, importIteration) => {
 					versificationSchemaId: module.versificationId,
 					versificationSchema: module.versification_schema,
 				})
+				// if (row.rid == 1031055 || row.rid == 1032001) {
+				// 	console.log(row)
+				// 	console.log(parallel_id)
+				// }
 				if (parallel_id === -1) {
 					parallel_id = ++parallelId
 				}
@@ -380,7 +427,7 @@ const promptToRebuild = async () => {
 					node ./create-indices.js
 					node ./create-treenode-mapping-index.js
 					node ./create-warm-word-index.js
-					node ./create-ordering-index.js
+					node ./create-ordering-index-2.js
 				`.replace(/\t\t\t\t\t/g, " - "))
 				rl.close()
 			}
