@@ -418,7 +418,7 @@ const promptToRebuild = async () => {
 				require("./create-indices.js")
 				require("./create-treenode-mapping-index.js")
 				require("./create-warm-word-index.js")
-				require("./create-ordering-index.js")
+				require("./create-ordering-index-2.js")
 				console.log("Done!")
 				rl.close()
 			}
