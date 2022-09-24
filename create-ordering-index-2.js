@@ -109,7 +109,10 @@ const generateInsertQuery = values => `
 	};
 `
 
+console.log("Generating order index for each versification schema")
+
 v_schemas_by_versification_hierarchy.forEach(s => {
+	console.log(` - ${s.name}`)
 	const order = generateOrderForSchema(s.name)
 	const schema_ordering_index = order.map((o, i) => ({
 		parallel_id: o.parallel_id,
@@ -123,4 +126,4 @@ v_schemas_by_versification_hierarchy.forEach(s => {
 		pg.querySync(q)
 	}
 })
-console.log("done")
+console.log(" - done\n---")
