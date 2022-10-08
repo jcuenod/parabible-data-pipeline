@@ -104,6 +104,6 @@ const module_data = {
     "versification_schema": "kjv",
     "license": "Adapted and Modified © 1990 ATHENA DATA PRODUCTS",
     "url": "https://ccat.sas.upenn.edu/gopher/text/religion/churchwriters/ApostolicFathers/",
-    "language": "en"
+    "language": "en",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")

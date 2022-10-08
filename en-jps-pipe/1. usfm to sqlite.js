@@ -87,10 +87,11 @@ csvs.forEach((filename) => {
 console.log("done")
 
 const module_info = {
-	name: "Jewish Publication Society",
-	abbreviation: "JPS",
-	versification_schema: "kjv",
-	license: "Public Domain",
-	url: "https://github.com/opensiddur/opensiddur",
+	"name": "Jewish Publication Society",
+	"abbreviation": "JPS",
+	"versification_schema": "kjv",
+	"license": "Public Domain",
+	"url": "https://github.com/opensiddur/opensiddur",
+	"language": "en",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")

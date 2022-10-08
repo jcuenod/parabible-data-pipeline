@@ -82,11 +82,11 @@ csvs.forEach((filename) => {
 })
 console.log("done")
 
-const module_info = {
-	name: "Santa Biblia Reina Valera Gómez",
-	abbreviation: "RVG",
-	versification_schema: "kjv",
-	license: "Copyright © 2004, 2010 Dr. Humberto Gómez Caballero",
-	url: "https://ebible.org/details.php?id=sparvg",
-}
-fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")
+	const module_info = {
+		"name": "Santa Biblia Reina Valera Gómez",
+		"abbreviation": "RVG",
+		"versification_schema": "kjv",
+		"license": "Copyright © 2004, 2010 Dr. Humberto Gómez Caballero",
+		"url": "https://ebible.org/details.php?id=sparvg",
+		"language": "es",
+	}

@@ -197,6 +197,6 @@ const module_data = {
 	"versification_schema": "lxx",
 	"license": "Copyright © 1988 University of Pennsylvania",
 	"url": "http://ccat.sas.upenn.edu/gopher/text/religion/biblical/",
-	"language": "el"
+	"language": "el",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")

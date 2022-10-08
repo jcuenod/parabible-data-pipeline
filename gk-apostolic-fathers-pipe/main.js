@@ -150,6 +150,6 @@ const module_data = {
     "versification_schema": "kjv",
     "license": "???",
     "url": "",
-    "language": "el"
+    "language": "el",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")

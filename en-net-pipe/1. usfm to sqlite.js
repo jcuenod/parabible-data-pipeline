@@ -93,6 +93,7 @@ const module_info = {
 	"abbreviation": "NET",
 	"versification_schema": "kjv",
 	"license": "Copyright ©1996-2016 by Biblical Studies Press, L.L.C. All rights reserved.",
-	"url": "https://netbible.com/"
+	"url": "https://netbible.com/",
+	"language": "en",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")

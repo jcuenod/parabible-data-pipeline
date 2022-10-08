@@ -94,6 +94,7 @@ const module_info = {
 	"abbreviation": "ULT",
 	"versification_schema": "kjv",
 	"license": "CC-BY-SA",
-	"url": "https://www.unfoldingword.org/ult"
+	"url": "https://www.unfoldingword.org/ult",
+	"language": "en",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")

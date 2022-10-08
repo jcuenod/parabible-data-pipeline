@@ -10,7 +10,7 @@ const columnsToNorm = [
 	"lexeme",
 ]
 const normalizeGreekValues = obj => {
-	const r = Object.assign({},obj)
+	const r = Object.assign({}, obj)
 	columnsToNorm.forEach(k => {
 		r[k] = r[k].normalize("NFC").toLowerCase()
 	})
@@ -208,12 +208,12 @@ while (words_features.length > 0) {
 
 console.log("\nWriting module data...")
 const module_data = {
-	name: "Nestle Aland 1904",
-	abbreviation: "Nestle1904",
-	versification_schema: "gnt",
-	license: "Public Domain",
-	url: "https://github.com/biblicalhumanities/Nestle1904/",
-	language: "el"
+	"name": "Nestle Aland 1904",
+	"abbreviation": "Nestle1904",
+	"versification_schema": "gnt",
+	"license": "Public Domain",
+	"url": "https://github.com/biblicalhumanities/Nestle1904/",
+	"language": "el",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")
 
