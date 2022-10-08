@@ -13,12 +13,13 @@ const BOOK_ORDER = [
     "2 Clement",
     "Didache",
     "Diognetus",
-    "Hermas",
+    "Shepherd of Hermas",
     "Ignatius to the Ephesians",
     "Ignatius to the Magnesians",
     "Ignatius to the Phila",
     "Ignatius to Polycarp",
     "Ignatius to the Romans",
+    "Ignatius to the Philadelphians",
     "Ignatius to the Smyrneans",
     "Ignatius to the Trallians",
     "Martyrdom of Polycarp",
@@ -27,6 +28,10 @@ const BOOK_ORDER = [
 
 const refToRid = ref => {
     const book_int = RID_OFFSET + BOOK_ORDER.indexOf(ref.book)
+    if (book_int === RID_OFFSET - 1) {
+        console.error(ref)
+        throw ("fail")
+    }
     return book_int * 1000000 +
         ref.chapter * 1000 +
         ref.verse
@@ -38,7 +43,7 @@ const IGNORE_LIST = [
     "README.md",
     ".git",
     // TODO: Just for now
-    "Hermas",
+    "013-shepherd.csv",
     "tmp"
 ]
 
@@ -57,15 +62,25 @@ files.forEach(f => {
     // First row is [ reference,leader,word,trailer,lemma ],
     rows.slice(1).forEach(row => {
         const [chv, leader, text, trailerWithoutSpace, lexeme] = row
+
+        // TODO: Fix handling of these unusual chapters
         if (book === "i_clement" && chv.startsWith("SB.")) {
+            return
+        }
+        if (book === "barnabas" && chv.startsWith("SB.")) {
             return
         }
         if (book === "martyrdom" && chv.startsWith("EP.")) {
             return
         }
+
         const trailer = trailerWithoutSpace + " "
         const refString = book + " " + chv
         const reference = rp.parse(refString)
+        if (!reference.book) {
+            console.error(refString)
+            throw (`fail`)
+        }
         const rid = refToRid(reference)
         const wid = wordCounter++
         wordInsert.push({ wid, leader, text, trailer, lexeme, rid })
