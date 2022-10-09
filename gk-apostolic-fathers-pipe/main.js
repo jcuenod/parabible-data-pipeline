@@ -16,7 +16,6 @@ const BOOK_ORDER = [
     "Shepherd of Hermas",
     "Ignatius to the Ephesians",
     "Ignatius to the Magnesians",
-    "Ignatius to the Phila",
     "Ignatius to Polycarp",
     "Ignatius to the Romans",
     "Ignatius to the Philadelphians",
@@ -56,7 +55,7 @@ const verseTextObjects = []
 files.forEach(f => {
     console.log(" -", f)
     const book = f.substring(4, f.length - 4)
-    console.log(book, rp.parse(book))
+    console.log(book, rp.parse(book), refToRid(rp.parse(book)))
     const lines = fs.readFileSync("./source-files/" + f, "utf8")
     const rows = csv2array(lines)
     // First row is [ reference,leader,word,trailer,lemma ],
