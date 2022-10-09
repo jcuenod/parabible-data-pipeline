@@ -112,6 +112,8 @@ const range = size => Array.from(new Array(size)).map((_, i) => i)
     }, {
         name: "Shepherd of Hermas",
         versesPerChapter: [/* hermas is a mess - seem to be different systems... */]
+        // Note that there are headings in Hermas,
+        // This means that we have a "verse: 0", which is not supported below...
     }, {
         name: 'Ignatius to the Ephesians',
         versesPerChapter: [1, 3, 2, 2, 2, 3, 2, 2, 2, 2, 3, 2, 2, 2, 2, 3, 2, 2, 2, 3, 2, 2],
@@ -151,7 +153,7 @@ const range = size => Array.from(new Array(size)).map((_, i) => i)
             apFathersRids.push(...range(vv).map(v =>
                 book_int * 1_000_000 +
                 chapter * 1_000 +
-                v
+                v + 1 // There are only headings in Hermas
             ))
         })
     })
