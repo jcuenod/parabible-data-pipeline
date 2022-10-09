@@ -4,7 +4,6 @@ const INSERT_LIMIT = 5000
 const fs = require("fs")
 const ReferenceParser2 = require("/home/jcuenod/Programming/ReferenceParser/lib/index.js")
 const rp = new ReferenceParser2.default()
-
 const RID_OFFSET = 111
 const BOOK_ORDER = [
     "Barnabas",
@@ -15,7 +14,6 @@ const BOOK_ORDER = [
     "Shepherd of Hermas",
     "Ignatius to the Ephesians",
     "Ignatius to the Magnesians",
-    "Ignatius to the Phila",
     "Ignatius to Polycarp",
     "Ignatius to the Romans",
     "Ignatius to the Philadelphians",
