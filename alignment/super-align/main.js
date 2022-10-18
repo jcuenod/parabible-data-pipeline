@@ -121,14 +121,14 @@ const range = size => Array.from(new Array(size)).map((_, i) => i)
         name: 'Ignatius to the Magnesians',
         versesPerChapter: [1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 3, 1, 1, 2, 1, 1],
     }, {
+        name: 'Ignatius to the Philadelphians',
+        versesPerChapter: [1, 2, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 2],
+    }, {
         name: 'Ignatius to Polycarp',
         versesPerChapter: [1, 3, 3, 2, 3, 2, 2, 3, 3],
     }, {
         name: 'Ignatius to the Romans',
         versesPerChapter: [1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3],
-    }, {
-        name: 'Ignatius to the Philadelphians',
-        versesPerChapter: [1, 2, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 2],
     }, {
         name: 'Ignatius to the Smyrneans',
         versesPerChapter: [1, 2, 1, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 2],
