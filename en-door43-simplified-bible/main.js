@@ -92,6 +92,8 @@ console.log("done")
 const module_info = {
 	"name": "unfoldingWord® Simplified Text",
 	"abbreviation": "UST",
+	"description": "The UST is intended to provide a simple, clear presentation of the meaning of the Bible without using any figures of speech, idioms, or other grammatical features that can be difficult to translate.",
+	"corpora": ["OT", "NT"],
 	"versification_schema": "kjv",
 	"license": "CC-BY-SA",
 	"url": "https://www.unfoldingword.org/ust",
