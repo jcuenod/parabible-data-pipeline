@@ -92,6 +92,8 @@ console.log("done")
 const module_info = {
 	"name": "unfoldingWord® Literal Text",
 	"abbreviation": "ULT",
+	"description": "The ULT (unfoldingWord® Literal Text) is a form-centric (and thus “literal”) version of the Bible in English.",
+	"corpora": ["OT", "NT"],
 	"versification_schema": "kjv",
 	"license": "CC-BY-SA",
 	"url": "https://www.unfoldingword.org/ult",
