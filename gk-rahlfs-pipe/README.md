@@ -24,4 +24,4 @@ The CATSS data includes *parsing* and *lemmatisation* for Rahlf's LXX text. Ther
 ### Enrichments
 
  - Normalised Lemmas (to cross-search the NT)
- - Glosses (should these be normalised too, if possible?)
+- **Glosses**: We can use glosses from https://github.com/openscriptures/GreekResources (converted to sqlite by https://github.com/jcuenod/greek-glosses). **We will need to normalise lemmas.**
