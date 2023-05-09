@@ -131,10 +131,15 @@ fs.createReadStream(SOURCE_FILE)
                 features.add(feature)
             }
         }
+        features.delete("wid")
+        features.delete("rid")
+
         // Create table with all features
         db.exec(`
         CREATE TABLE word_features (
-            ${Array.from(features).map(f => `${f} TEXT`).join(",\n")}
+            wid INTEGER,
+            ${Array.from(features).map(f => `${f} TEXT`).join(",\n")},
+            rid INTEGER
         );`)
 
         console.log("Gettings verse text...")
@@ -154,9 +159,13 @@ fs.createReadStream(SOURCE_FILE)
         // Batch insert word features
         const insert = db.prepare(`
         INSERT INTO word_features (
-            ${Array.from(features).join(",\n")}
+            wid,
+            ${Array.from(features).join(",\n")},
+            rid
         ) VALUES (
-            ${Array.from(features).map(f => `@${f}`).join(",\n")}
+            @wid,
+            ${Array.from(features).map(f => `@${f}`).join(",\n")},
+            @rid
         );`)
         const insertMany = (words) => {
             db.transaction((words) => {
