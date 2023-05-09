@@ -20,10 +20,9 @@ In addition, Clear Bible has enriched the data with syntax trees and word sense 
 
 ### Notes
 
-This repo builds off the TSV at this point. Syntactical data from the XML trees is not yet included.
+This repo currently builds off the TSV. Syntactical data from the XML trees is not included.
 
 ### Enrichments
 
- - **Syntax Trees**: I will need to investigate how to make use of the trees as they are provided (Parabible only really supports shallow trees)
+ - **Syntax Trees**: I will need to investigate how to make use of the trees as they are provided (Parabible only really supports shallow trees). Oliver Glanz(?) produced sentence and clause information from the punctuation published at https://github.com/CenterBLC/NA. It's unclear how useful this is.
  - **Glosses**: Note also, dictionaries by Dodson and Mounce can probably be mapped to Nestle1904 using strongs numbers.
- - **ALSO:** (sentence, clause!) https://github.com/CenterBLC/NA
