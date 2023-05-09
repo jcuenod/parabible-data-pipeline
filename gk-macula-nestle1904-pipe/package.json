@@ -1,0 +1,17 @@
+{
+  "name": "gk-macula-nestle1904-pipe",
+  "version": "1.0.0",
+  "description": "Generate files for Macula Nestle 1904 GNT",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^8.3.0",
+    "csv-parser": "^3.0.0",
+    "greek-transliteration": "^2.0.0",
+    "referenceparser": "^1.2.2"
+  }
+}
