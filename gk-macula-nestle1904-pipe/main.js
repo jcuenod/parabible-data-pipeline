@@ -205,10 +205,12 @@ fs.createReadStream(SOURCE_FILE)
         const module_data = {
             "name": "Macula Nestle Aland 1904",
             "abbreviation": "NA1904",
-            "versification_schema": "gnt",
-            "license": "Public Domain",
-            "url": "https://github.com/Clear-Bible/macula-greek",
+            "description": "MACULA Greek Linguistic Datasets, available at https://github.com/Clear-Bible/macula-greek/",
+            "corpora": ["NT"],
             "language": "el",
+            "versification_schema": "gnt",
+            "license": "CC BY 4.0",
+            "url": "https://github.com/Clear-Bible/macula-greek",
         }
         fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")
 
