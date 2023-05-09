@@ -25,5 +25,5 @@ This repo builds off the TSV at this point. Syntactical data from the XML trees 
 ### Enrichments
 
  - **Syntax Trees**: I will need to investigate how to make use of the trees as they are provided (Parabible only really supports shallow trees)
- - **Glosses**: Also in the repo (I haven't looked at how to include them). Note also, dictionaries by Dodson and Mounce can probably be mapped to Nestle1904 using strongs numbers.
+ - **Glosses**: Note also, dictionaries by Dodson and Mounce can probably be mapped to Nestle1904 using strongs numbers.
  - **ALSO:** (sentence, clause!) https://github.com/CenterBLC/NA
