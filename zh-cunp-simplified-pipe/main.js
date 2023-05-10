@@ -82,11 +82,13 @@ csvs.forEach((filename) => {
 console.log("done")
 
 const module_info = {
-	"name": "Chinese Union Version with New Punctuation (simplified)",
 	"abbreviation": "CUNPS",
+	"name": "Chinese Union Version with New Punctuation (simplified)",
+	"description": "Chinese Union Version translation of the Old and New Testament (simplified)",
+	"corpora": ["OT", "NT"],
+	"language": "zh",
 	"versification_schema": "kjv",
 	"license": "Public Domain",
 	"url": "https://ebible.org/details.php?id=cmn-cu89s&all=1",
-	"language": "zh",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")

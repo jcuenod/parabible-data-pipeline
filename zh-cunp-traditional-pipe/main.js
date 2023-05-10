@@ -50,7 +50,7 @@ const _getBookInt = (book) => {
 const generateRid = (reference) => {
 	const book = _getBookInt(reference.book) * 1000000
 	const ch = reference.chapter * 1000
-	const v = reference.hasOwnProperty("verse") ? reference.verse : 0
+	const v = "verse" in reference ? reference.verse : 0
 	return book + ch + v
 }
 const getRid = ({ book, chapter, verse }) =>
@@ -82,10 +82,13 @@ csvs.forEach((filename) => {
 console.log("done")
 
 const module_info = {
-	name: "Chinese Union Version with New Punctuation (traditional)",
-	abbreviation: "CUNPT",
-	versification_schema: "kjv",
-	license: "Public Domain",
-	url: "https://ebible.org/details.php?id=cmn-cu89s&all=1",
+	"abbreviation": "CUNPT",
+	"name": "Chinese Union Version with New Punctuation (traditional)",
+	"description": "Chinese Union Version translation of the Old and New Testament (traditional)",
+	"corpora": ["OT", "NT"],
+	"language": "zh",
+	"versification_schema": "kjv",
+	"license": "Public Domain",
+	"url": "https://ebible.org/details.php?id=cmn-cu89s&all=1",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_info), "utf8")
