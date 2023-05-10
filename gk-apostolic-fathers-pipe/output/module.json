@@ -1,1 +1,1 @@
-{"name":"Apostolic Fathers (Original)","abbreviation":"ApFathers","versification_schema":"kjv","license":"???","url":"","language":"el"}
+{"abbreviation":"APF","name":"Apostolic Fathers (Original)","description":"Apostolic Fathers in original languages. Compilation by James Tauber, initial tagging by James Cuénod.","corpora":["ApF"],"language":"el","versification_schema":"kjv","license":"???","url":"https://github.com/jcuenod/tagged-apostolic-fathers"}

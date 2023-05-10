@@ -60,7 +60,10 @@ files.forEach(f => {
     const rows = csv2array(lines)
     // First row is [ reference,leader,word,trailer,lemma ],
     rows.slice(1).forEach(row => {
-        const [chv, leader, text, trailerWithoutSpace, lexeme] = row
+        const [chv, leader, unnormedText, trailerWithoutSpace, unnormedLexeme] = row
+
+        const text = unnormedText.normalize("NFC")
+        const lexeme = unnormedLexeme.normalize("NFC")
 
         // TODO: Fix handling of these unusual chapters
         if (book === "i_clement" && chv.startsWith("SB.")) {
@@ -144,11 +147,13 @@ console.log(" - Done")
 
 
 const module_data = {
+    "abbreviation": "APF", // i.e., "Apostolic Fathers Original"
     "name": "Apostolic Fathers (Original)",
-    "abbreviation": "ApFathers",
-    "versification_schema": "kjv",
-    "license": "???",
-    "url": "",
+    "description": "Apostolic Fathers in original languages. Compilation by James Tauber, initial tagging by James Cuénod.",
+    "corpora": ["ApF"],
     "language": "el",
+    "versification_schema": "kjv",
+    "license": "Unknown license",
+    "url": "https://github.com/jcuenod/tagged-apostolic-fathers",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")

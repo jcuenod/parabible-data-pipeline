@@ -97,11 +97,13 @@ while (toInsert.length > 0) {
 }
 
 const module_data = {
+    "abbreviation": "LAPF",
     "name": "Apostolic Fathers (Lightfoot's Translation)",
-    "abbreviation": "ApFathersEn",
+    "description": "Lightfoot's English translation of the Apostolic Fathers Digitized from CCAT",
+    "corpora": ["ApF"],
+    "language": "en",
     "versification_schema": "kjv",
     "license": "Adapted and Modified © 1990 ATHENA DATA PRODUCTS",
     "url": "https://ccat.sas.upenn.edu/gopher/text/religion/churchwriters/ApostolicFathers/",
-    "language": "en",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")

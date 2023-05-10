@@ -2,7 +2,7 @@
 // This then has 1 "verse". Those that have 0 verses in their 0 element have no prologue
 
 //TODO: figure out hermas
-const books = [
+export default [
     {
         name: '1 Clement',
         versesPerChapter: [1, 3, 8, 4, 13, 6, 4, 7, 6, 4, 7, 2, 8, 4, 5, 6, 17, 6, 14, 3, 12, 9, 8, 5, 5, 5, 3, 7, 4, 3, 8, 4, 4, 8, 8, 12, 6, 5, 4, 9, 5, 4, 5, 6, 5, 8, 9, 7, 6, 6, 6, 5, 4, 5, 4, 6, 16, 7, 2, 4, 4, 3, 3, 4, 1, 2]
