@@ -1,1 +1,1 @@
-{"name":"Jewish Publication Society","abbreviation":"JPS","versification_schema":"kjv","license":"Public Domain","url":"https://github.com/opensiddur/opensiddur"}
+{"abbreviation":"JPS","name":"Jewish Publication Society","description":"Translation published by the Jewish Publication Society; the first translation of the Tanakh into English by a committee of Jews.","corpora":["OT"],"language":"en","versification_schema":"kjv","license":"Public Domain","url":"https://github.com/opensiddur/opensiddur"}
