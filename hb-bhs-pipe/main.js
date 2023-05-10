@@ -3,9 +3,11 @@ const { execSync } = require("child_process")
 const sqlOutputFile = __dirname + "/cache/data.sqlite"
 const jsonOutputFile = __dirname + "/cache/word_features.json"
 
+console.log("Generating SQLite database from TF using python script...")
 execSync(`
     python scripts/create_sql_from_tf.py ${sqlOutputFile} ${jsonOutputFile}
-`)
+`, { stdio: [process.stdin, process.stdout, process.stderr] })
+console.log("Back to javascript :)")
 
 const sqlite = require("better-sqlite3")
 const db = sqlite(sqlOutputFile)
@@ -29,11 +31,13 @@ fs.copyFileSync(sqlOutputFile, __dirname + "/output/data.sqlite")
 
 // Write out module_data json file
 const module_data = {
-    "name": "Tagged BHS with Syntax Trees",
-    "abbreviation": "ETCBC BHSA",
+    "abbreviation": "BHSA",
+    "name": "ETCBC BHSA",
+    "description": "Tagged OT with syntax trees by the ETCBC",
+    "corpora": ["OT"],
+    "language": "he",
     "versification_schema": "bhs",
     "license": "Attribution-NonCommercial 4.0 International (<a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>)",
     "url": "http://dx.doi.org/10.17026%2Fdans-z6y-skyh",
-    "language": "he",
 }
 fs.writeFileSync("./output/module.json", JSON.stringify(module_data), "utf-8")
