@@ -6,9 +6,13 @@ const sourceFolder = "./source-files/engnet_usfm/"
 const INSERT_LIMIT = 5000
 
 const usfmToCsv = async ({ input, output }) => {
-	const usfmFile = await fs.promises.readFile(input, 'utf-8')
+	// there are a couple of files in this corpus that have \q1 when it should be \q
+	const usfmFile = (await fs.promises.readFile(input, 'utf-8'))
+	console.log("Converting", input)
 	const myUsfmParser = new grammar.USFMParser(usfmFile, "relaxed")
+	console.log(" ... done")
 	const csvString = myUsfmParser.toCSV()
+	console.log(" ... writing")
 	await fs.promises.writeFile(output, csvString, "utf-8")
 }
 
