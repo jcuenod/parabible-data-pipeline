@@ -1,0 +1,17 @@
+{
+  "name": "en-bsb-pipe2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "referenceparser": "^1.2.2",
+    "sqlite3": "^5.1.6",
+    "tree-sitter": "^0.20.1",
+    "tree-sitter-usfm3": "^3.0.0-alpha.2"
+  }
+}
