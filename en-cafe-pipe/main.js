@@ -51,7 +51,7 @@ const IGNORE_LIST = [
 const normalizeQuotes = (text) => {
     // Replace single quotes with double quotes
     const singleQuoteRegex = /['‘’`]/g;
-    let normalizedText = text.replace(singleQuoteRegex, '"');
+    let normalizedText = text.replace(singleQuoteRegex, '\'');
   
     // Replace angled Unicode quotes with double quotes
     const angleQuoteRegex = /[“”]/g;
